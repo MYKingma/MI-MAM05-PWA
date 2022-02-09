@@ -1,9 +1,24 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
 
-const app = createApp(App)
+import { initializeApp } from "firebase/app";
 
-app.use(router)
+const app = createApp(App);
 
-app.mount('#app')
+const firebaseConfig = {
+  apiKey: "AIzaSyBEMVdOJ5nrGwKdRFSJn7_uob7hFDr1luc",
+  authDomain: "mi-mam05-pwa.firebaseapp.com",
+  projectId: "mi-mam05-pwa",
+  storageBucket: "mi-mam05-pwa.appspot.com",
+  messagingSenderId: "588595241360",
+  appId: "1:588595241360:web:3481eff01d860fa20f5315",
+  measurementId: "G-PNLPZ384M8",
+};
+
+// Initialize Firebase
+initializeApp(firebaseConfig);
+
+app.use(router);
+
+app.mount("#app");
