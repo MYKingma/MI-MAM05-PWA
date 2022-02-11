@@ -1,16 +1,17 @@
 <template>
   <el-main>
-    <h1>Home</h1>
+    <h1>TITEL</h1>
   </el-main>
 </template>
 
 <script>
 export default {
+  props: {},
   data() {
     return {};
   },
   computed: {},
-  async mounted() {},
+  mounted() {},
   methods: {},
   watch: {},
 };

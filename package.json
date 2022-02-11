@@ -12,7 +12,9 @@
     "firebase": "^9.6.6",
     "unplugin-element-plus": "^0.2.0",
     "vue": "^3.2.30",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "vuex": "^4.0.2",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
