@@ -1,125 +1,46 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "@/components/HelloWorld.vue";
-</script>
-
 <template>
-  <header>
-    <img
-      alt="Vue logo"
-      class="logo"
-      src="@/assets/logo.svg"
-      width="125"
-      height="125"
-    />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <!-- <el-menu
+    mode="horizontal"
+    @select="handleSelect"
+    router
+    active-text-color="green"
+  >
+    <el-menu-item index="/register">Register</el-menu-item>
+    <el-menu-item index="/login">Log in</el-menu-item>
+  </el-menu> -->
+  <el-affix>
+    <el-row class="home-header" justify="space-between" align="middle">
+      <el-button @click="$router.push('/')">Home</el-button>
+      <div>
+        <el-button @click="$router.push('/register')">Register</el-button>
+        <el-button @click="$router.push('/login')">Log in</el-button>
+      </div>
+    </el-row>
+  </el-affix>
+  <el-container>
+    <Transition>
+      <RouterView />
+    </Transition>
+  </el-container>
+  <el-footer></el-footer>
 </template>
 
-<style>
+<script>
+import "element-plus/theme-chalk/display.css";
+</script>
+<style lang="scss">
 @import "@/assets/base.css";
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
+.home-header {
+  padding: 10px;
+  border: 1px solid green;
+}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
 }
 
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 </style>
