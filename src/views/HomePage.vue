@@ -54,7 +54,6 @@ export default {
   async mounted() {},
   methods: {
     imageSelected(images) {
-      console.log("sel", images);
       this.images = [].concat(images, this.images);
     },
     deleteImage(imageIndex) {
