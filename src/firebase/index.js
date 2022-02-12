@@ -11,6 +11,7 @@ const register = async (newUser) => {
   );
   const profiles = await getCollection("profiles");
   await setDoc(doc(profiles, user.user.uid), {
+    uid: user.user.uid,
     name: newUser.name,
     role: newUser.role.toLowerCase(),
   });

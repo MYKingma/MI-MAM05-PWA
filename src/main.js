@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const app = createApp(App);
@@ -19,6 +20,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 initializeApp(firebaseConfig);
+const auth = getAuth();
+
+auth.onAuthStateChanged((user) => {
+  store.dispatch("fetchUser", user);
+});
 
 const db = getFirestore();
 

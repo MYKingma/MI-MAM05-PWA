@@ -1,5 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
+import store from "../store";
+
+const checkAuthorization = async (roles) => {
+  if (roles) {
+    if (!roles.includes(store.state.user.role)) return false;
+  }
+  return true;
+};
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,20 +20,37 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("../views/LoginPage.vue"),
     },
     {
       path: "/register",
       name: "register",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import("../views/RegisterPage.vue"),
     },
+    {
+      path: "/student",
+      name: "student",
+      meta: { roles: ["admin", "student"] },
+      component: () => import("../views/StudentPage.vue"),
+    },
+    {
+      path: "/physician",
+      name: "physician",
+      meta: { roles: ["admin", "physician"] },
+      component: () => import("../views/PhysicianPage.vue"),
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      meta: { roles: ["admin"] },
+      component: () => import("../views/AdminPage.vue"),
+    },
   ],
+});
+
+router.beforeEach(async (to) => {
+  const authorized = await checkAuthorization(to.meta.roles);
+  if (!authorized) return "/";
 });
 
 export default router;

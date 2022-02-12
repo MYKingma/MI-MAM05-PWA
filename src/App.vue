@@ -10,7 +10,17 @@
   </el-menu> -->
   <el-affix>
     <el-row class="home-header" justify="space-between" align="middle">
-      <el-button @click="$router.push('/')">Home</el-button>
+      <div>
+        <el-button @click="$router.push('/')">Home</el-button>
+        <el-button @click="$router.push('/admin')">Admin</el-button>
+        <el-button @click="$router.push('/student')">Student</el-button>
+        <el-button @click="$router.push('/physician')">Phisician</el-button>
+      </div>
+      <p>
+        Logged in user: {{ user.name || "null" }}, <br />
+        Role:
+        {{ user.role || "null" }}
+      </p>
       <div>
         <el-button @click="$router.push('/register')">Register</el-button>
         <el-button @click="$router.push('/login')">Log in</el-button>
@@ -29,27 +39,27 @@
 </template>
 
 <script>
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
+import { mapGetters } from "vuex";
+
 export default {
   data() {
-    return {};
+    return {
+      auth: null,
+    };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      user: "user",
+    }),
+  },
   mounted() {
-    const auth = getAuth();
-    onAuthStateChanged(auth, function (user) {
-      if (user) {
-        // TODO: vuex logged in
-        console.log("IN");
-        console.log(user);
-      } else {
-        // TODO: vuex logged out
-        console.log("OUT");
-      }
-    });
+    this.auth = getAuth();
   },
   methods: {
-    async logOut() {},
+    async logOut() {
+      signOut(this.auth);
+    },
   },
   watch: {},
 };
