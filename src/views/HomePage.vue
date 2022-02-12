@@ -9,60 +9,70 @@
     <br />
     <el-collapse v-model="activeSection">
       <el-collapse-item title="Photo upload and preview" name="1">
-        <ImageUpload />
+        <el-row>
+          <ImageUpload @select-image="imageSelected" />
+        </el-row>
+        <ImagePreview
+          :images="images"
+          :upload="true"
+          @delete-image="deleteImage"
+        />
       </el-collapse-item>
-      <!-- <el-collapse-item title="Feedback" name="2">
-        <div>
-          Operation feedback: enable the users to clearly perceive their
-          operations by style updates and interactive effects;
-        </div>
-        <div>
-          Visual feedback: reflect current state by updating or rearranging
-          elements of the page.
-        </div>
+      <el-collapse-item title="Upload images to firebase" name="2">
+        <el-row>
+          <el-button @click="uploadImages"
+            >Upload above images to firebase</el-button
+          >
+          <el-button @click="getImages"
+            >Retrieve images from firebase</el-button
+          >
+        </el-row>
+        <ImagePreview :images="imagesFromFirebase" />
       </el-collapse-item>
-      <el-collapse-item title="Efficiency" name="3">
-        <div>
-          Simplify the process: keep operating process simple and intuitive;
-        </div>
-        <div>
-          Definite and clear: enunciate your intentions clearly so that the
-          users can quickly understand and make decisions;
-        </div>
-        <div>
-          Easy to identify: the interface should be straightforward, which helps
-          the users to identify and frees them from memorizing and recalling.
-        </div>
-      </el-collapse-item>
-      <el-collapse-item title="Controllability" name="4">
-        <div>
-          Decision making: giving advices about operations is acceptable, but do
-          not make decisions for the users;
-        </div>
-        <div>
-          Controlled consequences: users should be granted the freedom to
-          operate, including canceling, aborting or terminating current
-          operation.
-        </div>
-      </el-collapse-item> -->
     </el-collapse>
   </el-main>
 </template>
 
 <script>
 import ImageUpload from "../components/ImageUpload.vue";
+import ImagePreview from "../components/ImagePreview.vue";
+import { uploadFiles } from "../firebase/index";
+import { getFiles } from "../db";
 export default {
   data() {
     return {
       activeSection: 1,
+      images: [],
+      imagesFromFirebase: [],
     };
   },
   components: {
     ImageUpload,
+    ImagePreview,
   },
   computed: {},
   async mounted() {},
-  methods: {},
+  methods: {
+    imageSelected(images) {
+      console.log("sel", images);
+      this.images = [].concat(images, this.images);
+    },
+    deleteImage(imageIndex) {
+      this.images.splice(imageIndex, 1);
+    },
+    async uploadImages() {
+      await uploadFiles(
+        "images",
+        this.images.map((image) => image.data)
+      );
+    },
+    async getImages() {
+      const filePaths = await getFiles([
+        "images/1644690104554_93557-950-692 kopie.jpg",
+      ]);
+      this.imagesFromFirebase = filePaths;
+    },
+  },
   watch: {},
 };
 </script>

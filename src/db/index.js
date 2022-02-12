@@ -1,5 +1,6 @@
-import db from "../main";
 import { collection, query, getDocs, where } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
+import { db, storage } from "../main";
 
 const getData = async (collectionString, attribute, operator, value) => {
   const collectionReference = collection(db, collectionString);
@@ -20,4 +21,19 @@ const getCollection = async (collectionString) => {
   return collectionReference;
 };
 
-export { getData, getCollection };
+const getFiles = async (filePathArray) => {
+  const pathReferences = [];
+  await Promise.all(
+    filePathArray.map(async (filePath) => {
+      const fileRef = ref(storage, `${filePath}`);
+      const fileURL = await getDownloadURL(fileRef);
+      pathReferences.push({
+        filePath,
+        url: fileURL,
+      });
+    })
+  );
+  return pathReferences;
+};
+
+export { getData, getCollection, getFiles };

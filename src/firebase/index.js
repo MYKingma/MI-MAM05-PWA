@@ -1,9 +1,10 @@
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { ref, uploadBytes } from "firebase/storage";
 import { getCollection } from "../db";
+import { storage, auth } from "../main";
 
 const register = async (newUser) => {
-  const auth = getAuth();
   const user = await createUserWithEmailAndPassword(
     auth,
     newUser.email,
@@ -17,4 +18,17 @@ const register = async (newUser) => {
   });
 };
 
-export { register };
+const uploadFiles = async (refString, filesArray) => {
+  filesArray.forEach(async (file) => {
+    const storageRef = ref(storage, `${refString}/${Date.now()}_${file.name}`);
+    const filepathArray = [];
+    try {
+      const result = await uploadBytes(storageRef, file);
+      filepathArray.push(result.fullPath);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+};
+
+export { register, uploadFiles };

@@ -5,6 +5,7 @@ import store from "./store";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const app = createApp(App);
 
@@ -20,17 +21,18 @@ const firebaseConfig = {
 
 // Initialize Firebase
 initializeApp(firebaseConfig);
+
 const auth = getAuth();
+const db = getFirestore();
+const storage = getStorage();
 
 auth.onAuthStateChanged((user) => {
   store.dispatch("fetchUser", user);
 });
-
-const db = getFirestore();
 
 app.use(router);
 app.use(store);
 
 app.mount("#app");
 
-export default db;
+export { db, auth, storage };

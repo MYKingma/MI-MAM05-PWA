@@ -1,46 +1,34 @@
 <template>
-  <el-main>
-    <el-upload
-      ref="upload"
-      class="upload-demo"
-      :limit="1"
-      :on-exceed="handleExceed"
-      :auto-upload="false"
-      accept="image/*"
-      capture="camera"
-    >
-      <template #trigger>
-        <el-button type="primary">select file</el-button>
-      </template>
-      <el-button class="ml-3" type="success" @click="submitUpload"
-        >upload to server</el-button
-      >
-      <template #tip>
-        <div class="el-upload__tip" style="color: red">
-          limit 1 file, new file will cover the old file
-        </div>
-      </template>
-    </el-upload>
-  </el-main>
+  <el-upload
+    class="upload-image"
+    action=""
+    :limit="1"
+    :on-exceed="emitImage"
+    :show-file-list="false"
+    :http-request="emitImage"
+    accept="image/*"
+    multiple
+  >
+    <el-button type="primary">Click to upload</el-button>
+  </el-upload>
 </template>
 
 <script>
 export default {
   props: {},
   data() {
-    return {
-      image: null,
-    };
+    return {};
   },
   computed: {},
   mounted() {},
   methods: {
-    handleExceed(files) {
-      this.image.value.clearFiles();
-      this.image.value.handleStart(files[0]);
-    },
-    submitUpload() {
-      this.image.value.submit();
+    async emitImage(event) {
+      const images = event.length ? Array.from(event) : [event.file];
+      const imagesObject = images.map((image) => ({
+        url: URL.createObjectURL(image),
+        data: image,
+      }));
+      this.$emit("selectImage", imagesObject);
     },
   },
   watch: {},
