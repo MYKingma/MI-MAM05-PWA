@@ -19,12 +19,16 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     VitePWA({
+      mode: "development",
+      base: "/",
+      srcDir: "src",
+      filename: "sw.ts",
       strategies: "injectManifest",
       includeAssets: [
-        "favicon.png",
-        "favicon.ico",
-        "robots.txt",
-        "apple-touch-icon.png",
+        "/favicon.png",
+        "/favicon.ico",
+        "/robots.txt",
+        "/apple-touch-icon.png",
       ],
       manifest: {
         name: "MI-MAM05-PWA",
@@ -32,6 +36,7 @@ export default defineConfig({
         description: "Study medical reasoning",
         theme_color: "#ffffff",
         background_color: "#ffffff",
+        start_url: "/",
         display: "standalone",
         icons: [
           {
@@ -40,9 +45,15 @@ export default defineConfig({
             type: "image/png",
           },
           {
+            src: "/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+          {
             src: "android-chrome-512x512.png",
             sizes: "512x512",
             type: "image/png",
+            purpose: "any maskable",
           },
         ],
       },

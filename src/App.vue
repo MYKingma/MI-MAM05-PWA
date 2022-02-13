@@ -1,4 +1,5 @@
 <template>
+  <ReloadPWA />
   <!-- <el-menu
     mode="horizontal"
     @select="handleSelect"
