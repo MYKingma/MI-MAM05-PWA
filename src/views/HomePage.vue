@@ -10,7 +10,7 @@
     <el-collapse v-model="activeSection">
       <el-collapse-item title="Photo upload and preview" name="1">
         <el-row>
-          <ImageUpload @select-image="imageSelected" />
+          <ImageSelector @select-image="imageSelected" />
         </el-row>
         <ImagePreview
           :images="images"
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import ImageUpload from "../components/ImageUpload.vue";
+import ImageSelector from "../components/ImageSelector.vue";
 import ImagePreview from "../components/ImagePreview.vue";
 import { uploadFiles } from "../firebase/index";
 import { getFiles } from "../db";
@@ -47,7 +47,7 @@ export default {
     };
   },
   components: {
-    ImageUpload,
+    ImageSelector,
     ImagePreview,
   },
   computed: {},
