@@ -24,12 +24,7 @@ export default defineConfig({
       srcDir: "src",
       filename: "sw.js",
       strategies: "injectManifest",
-      includeAssets: [
-        "/favicon.png",
-        "/favicon.ico",
-        "/robots.txt",
-        "/apple-touch-icon.png",
-      ],
+      includeAssets: ["/favicon-32x32.png"],
       manifest: {
         name: "MI-MAM05-PWA",
         short_name: "Progressive web app",
@@ -62,6 +57,22 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
+  css: {
+    postcss: {
+      plugins: [
+        {
+          postcssPlugin: "internal:charset-removal",
+          AtRule: {
+            charset: (atRule) => {
+              if (atRule.name === "charset") {
+                atRule.remove();
+              }
+            },
+          },
+        },
+      ],
     },
   },
 });
