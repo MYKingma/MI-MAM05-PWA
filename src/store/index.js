@@ -1,11 +1,7 @@
 import { createStore } from "vuex";
-import createPersistedState from "vuex-persistedstate";
 import { getData } from "../db";
 
-const plugins = [createPersistedState()];
-
 const store = createStore({
-  plugins,
   state: {
     user: {
       uid: null,
