@@ -21,10 +21,7 @@ export default defineConfig({
     VitePWA({
       mode: "development",
       base: "/",
-      srcDir: "src",
-      filename: "sw.js",
-      strategies: "injectManifest",
-      includeAssets: ["/favicon-32x32.png"],
+      includeAssets: ["favicon.svg"],
       manifest: {
         name: "MI-MAM05-PWA",
         short_name: "Progressive web app",
@@ -35,17 +32,17 @@ export default defineConfig({
         display: "standalone",
         icons: [
           {
-            src: "android-chrome-192x192.png",
+            src: "pwa-192x192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "/android-chrome-512x512.png",
+            src: "/pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
           },
           {
-            src: "android-chrome-512x512.png",
+            src: "pwa-512x512.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable",
