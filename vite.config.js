@@ -24,7 +24,7 @@ export default defineConfig({
       includeAssets: ["favicon.svg"],
       manifest: {
         name: "MI-MAM05-PWA",
-        short_name: "Progressive web app",
+        short_name: "MedReas",
         description: "Study medical reasoning",
         theme_color: "#ffffff",
         background_color: "#ffffff",
