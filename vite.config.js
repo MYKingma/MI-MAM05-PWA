@@ -19,8 +19,9 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     VitePWA({
+      strategies: "injectManifest",
       includeAssets: [
-        "favicon.svg",
+        "favicon.png",
         "favicon.ico",
         "robots.txt",
         "apple-touch-icon.png",
@@ -30,22 +31,18 @@ export default defineConfig({
         short_name: "Progressive web app",
         description: "Study medical reasoning",
         theme_color: "#ffffff",
+        background_color: "#ffffff",
+        display: "standalone",
         icons: [
           {
-            src: "pwa-192x192.png",
+            src: "android-chrome-192x192.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "pwa-512x512.png",
+            src: "android-chrome-512x512.png",
             sizes: "512x512",
             type: "image/png",
-          },
-          {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any maskable",
           },
         ],
       },
