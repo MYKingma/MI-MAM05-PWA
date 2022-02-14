@@ -1,0 +1,56 @@
+
+{
+    "physician": {
+        "firstname": "Anne",
+        "lastname": "van Ingen",
+        "institution": "Amsterdam UMC",
+        "specialism" : "Emergency department"
+    },
+    "student": {
+        "firstname": "Manon",
+        "lastname": "Vos",
+        "institution": "Universiteit van Amsterdam",
+        "field of study": "Medicine"
+    },
+    "specialism": "Emergency department",
+    "date": "2022-02-23T18:25:43.511Z",
+    "patient": {
+        "gender": "Male",
+        "age": 15,
+        "ethnicity": "Nederland",
+        "medical history": ["broken arm in 2018"],
+        "medication": [""]
+    },
+    "main problem": "abdominal pain",
+    "introduction": "On a Mondayevening, I saw Peter on the emergency department. He looked pale and walked bended over. He complained about stomache age and nausea. It started the previous evening and became worse every hour. The pain was located at the right under quadrant.",
+    "phase": [{
+        "type": "additional questions",
+        "answer": ["Has the pain moved and how is defecation going?"],
+        "wrongAnswer": [""],
+        "outcome": "Doctor Superman was told that the pain started in the middle and moved to the right below. The patient doesn’t remember when his last defecation was. The patient seemed to get more pain during the conversation and bend over."
+    }, 
+    {
+        "type": "physical examination",
+        "answer": ["measuring vital parameters", "inspection, auscultation and palpation of the abdomen","testing rebound tenderness", "rectal exam"],
+        "wrongAnswer": ["auscultation of the heart", "prostate toucher"],
+        "outcome": ""
+    }, 
+    {
+        "type": "additional diagnostic tests",
+        "answer": ["echo abdomen","BSE","CRP","Leukocieten","Hb","Natrium"],
+        "wrongAnswer": ["X boz","MRI abdomen","endoscopy","MCV","ALAT/ASAT"],
+        "outcome": "result tests"
+    },
+    {
+        "type": "diagnosis",
+        "answer": ["Appendicitis"],
+        "wrongAnswer": ["Pancreatitis","Gallstones","Mental stress","Norovirus","Obstipation"],
+        "outcome": ""
+    },
+    {
+        "type": "treatment",
+        "answer": ["Appendectomy"],
+        "wrongAnswer": ["Antibiotics","Expectative","Diet advice"],
+        "outcome":""
+    }]
+}
