@@ -7,7 +7,7 @@ const store = createStore({
       uid: null,
       name: null,
       email: null,
-      emailVerified: null,
+      emailVerified: false,
       role: null,
     },
   },
@@ -31,7 +31,7 @@ const store = createStore({
           uid: null,
           name: null,
           email: null,
-          emailVerified: null,
+          emailVerified: false,
           role: null,
         };
       }
@@ -41,16 +41,10 @@ const store = createStore({
     async fetchUser({ commit }, user) {
       if (user) {
         const userData = await getData("profiles", "uid", "==", user.uid);
-        console.log({
-          uid: user.uid,
-          email: user.email,
-          emailVerified: user.emailVerified,
-          ...userData[0],
-        });
         commit("SET_USER", {
           uid: user.uid,
           email: user.email,
-          emailVerified: user.emailVerified,
+          emailVerified: user.emailVerified || false,
           ...userData[0],
         });
       } else {

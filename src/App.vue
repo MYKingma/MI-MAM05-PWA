@@ -1,5 +1,4 @@
 <template>
-  <ReloadPWA />
   <!-- <el-menu
     mode="horizontal"
     @select="handleSelect"
@@ -40,8 +39,8 @@
 </template>
 
 <script>
-import { getAuth, signOut } from "firebase/auth";
 import { mapGetters } from "vuex";
+import { logOut } from "./firebase";
 
 export default {
   data() {
@@ -54,12 +53,10 @@ export default {
       user: "user",
     }),
   },
-  mounted() {
-    this.auth = getAuth();
-  },
+  mounted() {},
   methods: {
-    async logOut() {
-      signOut(this.auth);
+    logOut() {
+      logOut();
     },
   },
   watch: {},

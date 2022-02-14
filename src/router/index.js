@@ -9,6 +9,13 @@ const checkAuthorization = async (roles) => {
   return true;
 };
 
+const checkEmailVerified = async (roles) => {
+  if (roles) {
+    if (!store.state.user.emailVerified) return false;
+  }
+  return true;
+};
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -21,6 +28,12 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: () => import("../views/LoginPage.vue"),
+    },
+    {
+      path: "/overview",
+      name: "overview",
+      meta: { roles: ["admin", "student", "physician"] },
+      component: () => import("../views/OverviewPage.vue"),
     },
     {
       path: "/register",
@@ -45,12 +58,20 @@ const router = createRouter({
       meta: { roles: ["admin"] },
       component: () => import("../views/AdminPage.vue"),
     },
+    {
+      path: "/email_not_verified",
+      name: "email_not_verified",
+      component: () => import("../views/EmailVerificationPage.vue"),
+    },
   ],
 });
 
 router.beforeEach(async (to) => {
-  const authorized = await checkAuthorization(to.meta.roles);
+  const roles = to.meta.roles || false;
+  const authorized = await checkAuthorization(roles);
   if (!authorized) return "/";
+  const emailVerified = await checkEmailVerified(roles);
+  if (!emailVerified) return "/email_not_verified";
 });
 
 export default router;

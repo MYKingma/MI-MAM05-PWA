@@ -66,9 +66,7 @@ export default {
       );
     },
     async getImages() {
-      const filePaths = await getFiles([
-        "images/1644690104554_93557-950-692 kopie.jpg",
-      ]);
+      const filePaths = await getFiles(["images/1644808590701_2646065.png"]);
       this.imagesFromFirebase = filePaths;
     },
   },

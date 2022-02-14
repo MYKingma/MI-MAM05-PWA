@@ -17,7 +17,8 @@
 </template>
 
 <script>
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { mapGetters } from "vuex";
+import { logIn } from "../firebase";
 export default {
   data() {
     return {
@@ -28,38 +29,24 @@ export default {
       errorMessage: "",
     };
   },
-  computed: {},
+  computed: {
+    ...mapGetters({
+      user: "user",
+    }),
+  },
   mounted() {},
   methods: {
     async login() {
-      try {
-        const auth = getAuth();
-        await signInWithEmailAndPassword(
-          auth,
-          this.loginUser.email,
-          this.loginUser.password
-        );
-        this.loginUser.email = null;
-        this.loginUser.password = null;
-      } catch (error) {
-        switch (error.code) {
-          case "auth/invalid-email":
-            this.errorMessage = "Invalid email";
-            break;
-          case "auth/user-not-found":
-            this.errorMessage = "No account with that email was found";
-            break;
-          case "auth/wrong-password":
-            this.errorMessage = "Incorrect password";
-            break;
-          default:
-            this.errorMessage = "Email or password was incorrect";
-            break;
-        }
+      this.errorMessage = await logIn(this.loginUser);
+    },
+  },
+  watch: {
+    user() {
+      if (this.user.uid) {
+        this.$router.push("/overview");
       }
     },
   },
-  watch: {},
 };
 </script>
 

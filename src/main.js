@@ -1,11 +1,15 @@
 import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
-import store from "./store";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+// import { useRegisterSW } from "virtual:pwa-register/vue";
+
+// useRegisterSW();
 
 const app = createApp(App);
 
@@ -19,7 +23,6 @@ const firebaseConfig = {
   measurementId: "G-PNLPZ384M8",
 };
 
-// Initialize Firebase
 initializeApp(firebaseConfig);
 
 const auth = getAuth();
