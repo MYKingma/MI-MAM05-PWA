@@ -7,9 +7,12 @@ import { getStorage } from "firebase/storage";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-// import { useRegisterSW } from "virtual:pwa-register/vue";
 
-// useRegisterSW();
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js");
+  });
+}
 
 const app = createApp(App);
 

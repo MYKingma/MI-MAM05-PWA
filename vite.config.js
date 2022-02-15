@@ -21,7 +21,13 @@ export default defineConfig({
     VitePWA({
       mode: "development",
       base: "/",
-      includeAssets: ["favicon.svg"],
+      includeAssets: [
+        "favicon.svg",
+        "favicon.ico",
+        "robots.txt",
+        "apple-touch-icon.png",
+      ],
+      strategies: "injectManifest",
       manifest: {
         name: "MI-MAM05-PWA",
         short_name: "MedReas",
@@ -41,35 +47,28 @@ export default defineConfig({
             sizes: "512x512",
             type: "image/png",
           },
-          {
-            src: "pwa-512x512.png",
-            sizes: "512x512",
-            type: "image/png",
-            purpose: "any maskable",
-          },
         ],
+        gcm_sender_id:
+          "BBP2ovYHYAJxmRGuY10yQy3u6Cztlmm7TfWKYBoEDB61MWfu_QAAeIrLgVMxF3krQZ43h0VKSFuLyI_6OjS89BI",
       },
+      //     injectManifest: {
+      //       runtimeCaching: [
+      //         {
+      //           urlPattern: /.*\.(?:png|jpg|jpeg|svg|gif)/,
+      //           handler: "staleWhileRevalidate",
+      //           options: {
+      //             cacheName: "app-images",
+      //             expiration: { maxEntries: 50 },
+      //           },
+      //         },
+      //       ],
+      //       globPatterns: ["**/*.{js,css,html,png,jpg,jpeg,svg,gif}"],
+      //     },
     }),
   ],
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-    },
-  },
-  css: {
-    postcss: {
-      plugins: [
-        {
-          postcssPlugin: "internal:charset-removal",
-          AtRule: {
-            charset: (atRule) => {
-              if (atRule.name === "charset") {
-                atRule.remove();
-              }
-            },
-          },
-        },
-      ],
     },
   },
 });

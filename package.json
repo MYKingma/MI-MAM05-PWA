@@ -14,7 +14,12 @@
     "vue": "^3.2.30",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2",
-    "workbox-precaching": "^6.4.2"
+    "workbox-cacheable-response": "^6.4.2",
+    "workbox-cli": "^6.4.2",
+    "workbox-expiration": "^6.4.2",
+    "workbox-precaching": "^6.4.2",
+    "workbox-routing": "^6.4.2",
+    "workbox-strategies": "^6.4.2"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",
