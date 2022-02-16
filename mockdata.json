@@ -19,10 +19,10 @@
             "gender": "Male",
             "age": 15,
             "ethnicity": "Nederland",
-            "medical history": ["broken arm in 2018"],
+            "medicalHistory": ["broken arm in 2018"],
             "medication": [""]
         },
-        "main problem": "abdominal pain",
+        "mainProblem": "abdominal pain",
         "introduction": "On a Mondayevening, I saw Peter on the emergency department. He looked pale and walked bended over. He complained about stomache age and nausea. It started the previous evening and became worse every hour. The pain was located at the right under quadrant.",
         "phase": [{
             "type": "additional questions",
