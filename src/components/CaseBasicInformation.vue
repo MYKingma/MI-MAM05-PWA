@@ -29,13 +29,14 @@
         <el-input v-model="mockData.etnicity" ></el-input>
       </el-form-item>
       <el-form-item label="Medical history">
-        <el-row>
-          <el-input v-model="mockData.medicalHistory" type="text" ></el-input>
-          <el-button @click="">+</el-button>
-        </el-row>
+         <el-tag class="mx-1" closable :disable-transitions="false" @close="">Exm tag</el-tag>
+         <el-input v-model="" @keyup.enter="" @blur=""></el-input>
+         <el-button class="button-new-tag ml-1" @click=""> + Add field </el-button>    
       </el-form-item>
       <el-form-item label="Medication">
-        <el-input v-model="mockData.medication" ></el-input>
+         <el-tag class="mx-1" closable :disable-transitions="false" @close="">Exm tag</el-tag>
+         <el-input v-model="" @keyup.enter="" @blur=""></el-input>
+         <el-button class="button-new-tag ml-1" @click=""> + Add field </el-button>    
       </el-form-item>
     </el-form>
   </el-main>
@@ -43,7 +44,6 @@
 
 <script>
 import mockData from "../../mockdata.json"
-const specialism = [{value:"Emergency department"}]
 export default {
   props: {},
   data() {
@@ -60,7 +60,7 @@ export default {
         medication: []
       },
       specialisms: [],
-      genders: []
+      genders: [],
     };
   },
   computed: {},
