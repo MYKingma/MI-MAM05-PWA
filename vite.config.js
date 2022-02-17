@@ -27,7 +27,7 @@ export default defineConfig({
         "robots.txt",
         "apple-touch-icon.png",
       ],
-      strategies: "injectManifest",
+      // strategies: "injectManifest",
       manifest: {
         name: "MI-MAM05-PWA",
         short_name: "MedReas",
@@ -50,6 +50,23 @@ export default defineConfig({
         ],
         gcm_sender_id:
           "BBP2ovYHYAJxmRGuY10yQy3u6Cztlmm7TfWKYBoEDB61MWfu_QAAeIrLgVMxF3krQZ43h0VKSFuLyI_6OjS89BI",
+      },
+      workbox: {
+        cacheId: "MI-MAM05-PWA",
+        runtimeCaching: [
+          {
+            urlPattern:
+              /^https:\/\/firebasestorage.googleapis.com\/v0\/b\/mi-mam05-pwa.appspot.com\/.*/i,
+            handler: "StaleWhileRevalidate",
+            method: "GET",
+            options: {
+              cacheName: "images",
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
       },
       //     injectManifest: {
       //       runtimeCaching: [

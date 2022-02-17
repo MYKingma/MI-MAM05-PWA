@@ -8,10 +8,16 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js");
-  });
+if (
+  "serviceWorker" in navigator &&
+  (window.location.href.includes("localhost:5050") ||
+    window.location.href.includes("netlify.app"))
+) {
+  if (!navigator.serviceWorker.controller) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js");
+    });
+  }
 }
 
 const app = createApp(App);

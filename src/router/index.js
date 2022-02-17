@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import store from "../store";
 
@@ -17,7 +17,7 @@ const checkEmailVerified = async (roles) => {
 };
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     {
       path: "/",
@@ -51,6 +51,12 @@ const router = createRouter({
       name: "physician",
       meta: { roles: ["admin", "physician"] },
       component: () => import("../views/PhysicianPage.vue"),
+    },
+    {
+      path: "/physician/case/edit",
+      name: "caseEdit",
+      // meta: { roles: ["admin", "physician"] },
+      component: () => import("../views/EditCasePage.vue"),
     },
     {
       path: "/admin",

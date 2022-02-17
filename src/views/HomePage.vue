@@ -67,6 +67,11 @@ export default {
     },
     async getImages() {
       const filePaths = await getFiles(["images/1644808590701_2646065.png"]);
+      // const localURLs = [];
+      // filePaths.forEach((file) => {
+      //   localURLs.push(URL.createObjectURL(file.blob));
+      // });
+      // console.log(localURLs);
       this.imagesFromFirebase = filePaths;
     },
   },
