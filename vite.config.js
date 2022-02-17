@@ -57,7 +57,7 @@ export default defineConfig({
           {
             urlPattern:
               /^https:\/\/firebasestorage.googleapis.com\/v0\/b\/mi-mam05-pwa.appspot.com\/.*/i,
-            handler: "StaleWhileRevalidate",
+            handler: "CacheFirst",
             method: "GET",
             options: {
               cacheName: "images",
