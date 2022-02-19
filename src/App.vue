@@ -38,9 +38,9 @@
   </el-affix>
   <el-container>
     <RouterView v-slot="{ Component }">
-      <!-- <Transition> -->
-      <component :is="Component" />
-      <!-- </Transition> -->
+      <Transition mode="out-in">
+        <component :is="Component" />
+      </Transition>
     </RouterView>
   </el-container>
   <el-footer></el-footer>
@@ -49,7 +49,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { logOut } from "./firebase";
-import axios from "axios";
+import { setTest } from "./db";
 
 export default {
   data() {
@@ -68,16 +68,7 @@ export default {
       logOut();
     },
     async test() {
-      const img = await axios.get(
-        "https://firebasestorage.googleapis.com/v0/b/mi-mam05-pwa.appspot.com/o/images%2F1644808590701_2646065.png?alt=media&token=dd687448-f2e2-4dc9-bfd2-7547636bea63",
-        {
-          headers: {
-            accept:
-              "image/png,image/svg+xml,image/*;q=0.8,video/*;q=0.8,*/*;q=0.5",
-          },
-        }
-      );
-      console.log(img);
+      setTest();
     },
   },
   watch: {},

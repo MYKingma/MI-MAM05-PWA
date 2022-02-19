@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import { toBase64 } from "../db";
 export default {
   props: {},
   data() {
@@ -24,10 +25,12 @@ export default {
   methods: {
     async emitImage(event) {
       const images = event.length ? Array.from(event) : [event.file];
-      const imagesObject = images.map((image) => ({
-        url: URL.createObjectURL(image),
-        data: image,
-      }));
+      const imagesObject = [];
+      await Promise.all(
+        images.map(async (image) => {
+          imagesObject.push({ base64: await toBase64(image) });
+        })
+      );
       this.$emit("selectImage", imagesObject);
     },
   },

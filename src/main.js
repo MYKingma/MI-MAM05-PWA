@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 import App from "./App.vue";
@@ -37,6 +37,7 @@ initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
 const storage = getStorage();
+enableIndexedDbPersistence(db);
 
 auth.onAuthStateChanged((user) => {
   store.dispatch("fetchUser", user);

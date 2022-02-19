@@ -10,7 +10,7 @@
           @click="deleteImage(index)"
           circle
         ></el-button>
-        <el-image :src="image.url">
+        <el-image :src="image.base64">
           <template #error>
             <div class="image-slot">
               <el-icon><Picture /></el-icon>

@@ -1,25 +1,32 @@
 <template>
   <el-main>
-    <h1>Edit case</h1>
-    <CaseBasicInformation v-if="caseLoaded" v-model="caseBasicInformation" />
-    <p>{{ caseBasicInformation.case.patient }}</p>
+    <h1 @click="test">Edit case</h1>
+    <CaseBasicInformation
+      v-if="caseLoaded"
+      v-model="caseEditData"
+      @date="test"
+    />
   </el-main>
 </template>
 
 <script>
-import { getData, getDataOnId } from "../db"
-import CaseBasicInformation from "../components/CaseBasicInformation.vue"
+import { getCaseOnId, getData, setCaseData } from "../db";
+import CaseBasicInformation from "../components/CaseBasicInformation.vue";
 export default {
   data() {
     return {
       caseLoaded: false,
-      caseBasicInformation: {
-        case: {
+      caseEditData: {
+        caseData: {
           date: null,
           specialism: null,
           mainProblem: null,
           introduction: null,
-          phases: []
+          patient: null,
+          images: [],
+          phases: [],
+          uid: null,
+          id: null,
         },
         specialisms: [],
         genders: ["Male", "Female", "Other"],
@@ -27,22 +34,33 @@ export default {
     };
   },
   components: {
-    CaseBasicInformation
+    CaseBasicInformation,
   },
-  computed: {},
+  computed: {
+    caseData() {
+      return this.caseEditData.caseData;
+    },
+  },
   async mounted() {
-    const data = await getData("cases")
-    this.caseBasicInformation.case = data[0]
-    this.caseBasicInformation.case.phases = []
-    data[0].phases.forEach(async (phaseID) => {
-      const phase = await getDataOnId("phases", phaseID)
-      this.caseBasicInformation.case.phases.push(phase)
-    })
-    this.caseBasicInformation.specialisms = await getData("specialisms")
-    this.caseLoaded = true
+    const caseDataTest = await getCaseOnId("efSvC2nU2IAh8jARpz1t");
+    this.caseEditData.caseData = caseDataTest;
+    console.log(caseDataTest);
+    this.caseEditData.specialisms = await getData("specialisms");
+    this.caseLoaded = true;
   },
-  methods: {},
-  watch: {},
+  methods: {
+    test(test) {
+      this.caseEditData.caseData.date = test;
+    },
+  },
+  watch: {
+    caseData: {
+      handler: function () {
+        setCaseData(this.caseEditData.caseData);
+      },
+      deep: true,
+    },
+  },
 };
 </script>
 

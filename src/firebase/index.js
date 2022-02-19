@@ -61,9 +61,9 @@ const logOut = async () => {
 };
 
 const uploadFiles = async (refString, filesArray) => {
+  const filepathArray = [];
   filesArray.forEach(async (file) => {
     const storageRef = ref(storage, `${refString}/${Date.now()}_${file.name}`);
-    const filepathArray = [];
     try {
       const result = await uploadBytes(storageRef, file);
       await updateMetadata(storageRef, { cacheControl: "public" });

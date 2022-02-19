@@ -36,8 +36,7 @@
 <script>
 import ImageSelector from "../components/ImageSelector.vue";
 import ImagePreview from "../components/ImagePreview.vue";
-import { uploadFiles } from "../firebase/index";
-import { getFiles } from "../db";
+import { uploadImages, getDataOnId } from "../db";
 export default {
   data() {
     return {
@@ -60,19 +59,12 @@ export default {
       this.images.splice(imageIndex, 1);
     },
     async uploadImages() {
-      await uploadFiles(
-        "images",
-        this.images.map((image) => image.data)
-      );
+      const ids = await uploadImages(this.images);
+      console.log(ids);
     },
     async getImages() {
-      const filePaths = await getFiles(["images/1644808590701_2646065.png"]);
-      // const localURLs = [];
-      // filePaths.forEach((file) => {
-      //   localURLs.push(URL.createObjectURL(file.blob));
-      // });
-      // console.log(localURLs);
-      this.imagesFromFirebase = filePaths;
+      const filePaths = await getDataOnId("images", "z4XFjWl4YkpiC2O0vutc");
+      this.imagesFromFirebase = [filePaths];
     },
   },
   watch: {},
