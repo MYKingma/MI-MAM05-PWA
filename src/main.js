@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import App from "./App.vue";
 import router from "./router";
@@ -43,6 +44,7 @@ auth.onAuthStateChanged((user) => {
   store.dispatch("fetchUser", user);
 });
 
+app.component("IconWrapper", FontAwesomeIcon);
 app.use(router);
 app.use(store);
 
