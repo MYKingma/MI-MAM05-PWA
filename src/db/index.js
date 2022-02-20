@@ -174,24 +174,29 @@ const updatePhase = async (phaseData) => {
     : await addData("phases", newPhaseData);
   await updateData(phaseRef, newPhaseData);
   if ("outcome" in phaseData) {
-    const newPhaseData =
-      phaseData.outcome.type === "string"
-        ? {
-            type: phaseData.outcome.type,
-            string: phaseData.outcome.string,
-          }
-        : {
-            type: phaseData.outcome.type,
-            bloodPressure: phaseData.outcome.bloodPressure,
-            bloodSaturation: phaseData.outcome.bloodSaturation,
-            breathRate: phaseData.outcome.breathRate,
-            heartRate: phaseData.outcome.heartRate,
-            temperature: phaseData.outcome.temperature,
-          };
+    const newOutcomeData = {};
+    Object.keys(phaseData.outcome).forEach((attribute) => {
+      if (attribute !== "id") {
+        newOutcomeData[attribute] = phaseData.outcome[attribute];
+      }
+    });
+    // phaseData.outcome.type === "string"
+    //   ? {
+    //       type: phaseData.outcome.type,
+    //       string: phaseData.outcome.string,
+    //     }
+    //   : {
+    //       type: phaseData.outcome.type,
+    //       bloodPressure: phaseData.outcome.bloodPressure,
+    //       bloodSaturation: phaseData.outcome.bloodSaturation,
+    //       breathRate: phaseData.outcome.breathRate,
+    //       heartRate: phaseData.outcome.heartRate,
+    //       temperature: phaseData.outcome.temperature,
+    //     };
     const outcomeRef = phaseData.outcome.id
       ? await getNestedRefOnId(phaseRef, "outcome", phaseData.outcome.id)
-      : await addNestedData(phaseRef, "outcome", newPhaseData);
-    await updateData(outcomeRef, newPhaseData);
+      : await addNestedData(phaseRef, "outcome", newOutcomeData);
+    await updateData(outcomeRef, newOutcomeData);
   }
   return phaseRef.id;
 };
