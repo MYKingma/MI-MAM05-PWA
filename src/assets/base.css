@@ -72,3 +72,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.el-input__prefix-inner > svg {
+  margin-top: 8px;
+}
+.el-button > span > .svg-inline--fa {
+  margin-left: 5px;
+}

@@ -58,7 +58,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .delete-button {
   position: absolute;
   z-index: 3000;
