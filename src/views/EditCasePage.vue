@@ -1,17 +1,26 @@
 <template>
   <el-main>
     <h1 @click="test">Edit case</h1>
-    <CaseBasicInformation
+    <!-- <CaseBasicInformation v-if="caseLoaded" v-model="caseEditData" />
+    <PhaseAdditionalQuestions
       v-if="caseLoaded"
       v-model="caseEditData"
-      @date="test"
-    />
+      :phaseIndex="0"
+    /> -->
+    <!-- <PhasePhysicalExamination
+      v-if="caseLoaded"
+      v-model="caseEditData"
+      :phaseIndex="1"
+    /> -->
   </el-main>
 </template>
 
 <script>
 import { getCaseOnId, getData, setCaseData } from "../db";
-import CaseBasicInformation from "../components/CaseBasicInformation.vue";
+import CaseBasicInformation from "../components/case/CaseBasicInformation.vue";
+import PhaseAdditionalQuestions from "../components/case/phases/PhaseAdditionalQuestions.vue";
+import PhasePhysicalExamination from "../components/case/phases/PhasePhysicalExamination.vue";
+
 export default {
   data() {
     return {
@@ -35,6 +44,8 @@ export default {
   },
   components: {
     CaseBasicInformation,
+    PhaseAdditionalQuestions,
+    PhasePhysicalExamination,
   },
   computed: {
     caseData() {
@@ -48,11 +59,7 @@ export default {
     this.caseEditData.specialisms = await getData("specialisms");
     this.caseLoaded = true;
   },
-  methods: {
-    test(test) {
-      this.caseEditData.caseData.date = test;
-    },
-  },
+  methods: {},
   watch: {
     caseData: {
       handler: function () {
@@ -64,4 +71,22 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
+}
+</style>
