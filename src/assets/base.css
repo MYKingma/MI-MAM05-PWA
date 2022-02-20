@@ -79,3 +79,16 @@ body {
 .el-button > span > .svg-inline--fa {
   margin-left: 5px;
 }
+
+.tag {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.tag-input {
+  max-width: 220px;
+  margin-bottom: 5px;
+}
+.tag-button {
+  margin-bottom: 5px;
+}

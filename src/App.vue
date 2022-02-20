@@ -79,7 +79,8 @@ export default {
 @import "@/assets/base.css";
 .home-header {
   padding: 10px;
-  border: 1px solid green;
+  border-bottom: 1px solid lightgrey;
+  background-color: white;
 }
 .v-enter-active,
 .v-leave-active {

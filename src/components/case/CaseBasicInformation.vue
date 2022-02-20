@@ -1,7 +1,8 @@
 <template>
-  <el-form>
+  <h3>Basic information</h3>
+  <el-form :inline="true" label-position="top">
     <el-form-item label="Specialism">
-      <el-select v-model="value.caseData.specialism">
+      <el-select class="input" v-model="value.caseData.specialism">
         <el-option
           v-for="item in value.specialisms"
           :label="item.name"
@@ -11,13 +12,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="Main problem">
-      <el-input v-model="value.caseData.mainProblem"></el-input>
-    </el-form-item>
-    <el-form-item label="Introduction">
-      <el-input
-        v-model="value.caseData.introduction"
-        type="textarea"
-      ></el-input>
+      <el-input class="input" v-model="value.caseData.mainProblem"></el-input>
     </el-form-item>
     <el-form-item label="Date">
       <el-date-picker
@@ -25,9 +20,21 @@
         type="date"
       ></el-date-picker>
     </el-form-item>
-    <h2>Patient information</h2>
+  </el-form>
+  <el-form label-position="top">
+    <el-form-item label="Introduction">
+      <el-input
+        v-model="value.caseData.introduction"
+        type="textarea"
+        autosize
+        resize="none"
+      ></el-input>
+    </el-form-item>
+  </el-form>
+  <h3>Patient information</h3>
+  <el-form :inline="true" label-position="top">
     <el-form-item label="Gender">
-      <el-select v-model="value.caseData.patient.gender">
+      <el-select class="input" v-model="value.caseData.patient.gender">
         <el-option
           v-for="item in value.genders"
           :label="item"
@@ -37,16 +44,25 @@
       </el-select>
     </el-form-item>
     <el-form-item label="Age">
-      <el-input v-model="value.caseData.patient.age" type="number"></el-input>
+      <el-input
+        class="input"
+        v-model="value.caseData.patient.age"
+        type="number"
+      ></el-input>
     </el-form-item>
     <el-form-item label="Etnicity">
-      <el-input v-model="value.caseData.patient.ethnicity"></el-input>
+      <el-input
+        class="input"
+        v-model="value.caseData.patient.ethnicity"
+      ></el-input>
     </el-form-item>
+  </el-form>
+  <el-form label-position="top">
     <el-form-item label="Medical history">
       <el-tag
         v-for="tag in value.caseData.patient.medicalHistory"
         :key="tag"
-        class="mx-1"
+        class="mx-1 tag"
         closable
         :disable-transitions="false"
         @close="handleClose('medicalHistory', tag)"
@@ -56,25 +72,25 @@
         v-if="showTagInput.medicalHistory"
         id="medicalHistoryTag"
         v-model="tagValue['medicalHistory']"
-        class="ml-1 w-20"
+        class="ml-1 w-20 tag-input"
         size="small"
         @keyup.enter="handleInputConfirm('medicalHistory')"
         @blur="handleInputConfirm('medicalHistory')"
       ></el-input>
       <el-button
         v-else
-        class="button-new-tag ml-1"
+        class="button-new-tag ml-1 tag-button"
         size="small"
         @click="showInput('medicalHistory')"
       >
-        + Add field
+        + Add medical history
       </el-button>
     </el-form-item>
     <el-form-item label="Medication">
       <el-tag
         v-for="tag in value.caseData.patient.medication"
         :key="tag"
-        class="mx-1"
+        class="mx-1 tag"
         closable
         :disable-transitions="false"
         @close="handleClose('medication', tag)"
@@ -84,18 +100,18 @@
         v-if="showTagInput.medication"
         id="medicationTag"
         v-model="tagValue['medication']"
-        class="ml-1 w-20"
+        class="ml-1 w-20 tag-input"
         size="small"
         @keyup.enter="handleInputConfirm('medication')"
         @blur="handleInputConfirm('medication')"
       ></el-input>
       <el-button
         v-else
-        class="button-new-tag ml-1"
+        class="button-new-tag ml-1 tag-button"
         size="small"
         @click="showInput('medication')"
       >
-        + Add field
+        + Add medication
       </el-button>
     </el-form-item>
   </el-form>
@@ -155,4 +171,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.input {
+  width: 220px;
+}
+</style>

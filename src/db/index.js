@@ -5,6 +5,7 @@ import {
   where,
   documentId,
   addDoc,
+  deleteDoc,
   // getDoc,
   setDoc,
 } from "firebase/firestore";
@@ -254,6 +255,30 @@ const setCaseData = async (caseData) => {
   await updateData(patientRef, newPatientData);
 };
 
+const deleteNestedData = async (parentRef, nestedCollectionString) => {
+  const collectionReference = collection(parentRef, nestedCollectionString);
+  const q = query(collectionReference);
+  const result = await getDocs(q);
+  const ref = result.docs[0].ref;
+  await deleteDoc(ref);
+  await deleteDoc(parentRef);
+};
+
+const deleteDataOnId = async (collectionString, value) => {
+  const collectionReference = collection(db, collectionString);
+  const filter = where(documentId(), "==", value);
+  const q = query(collectionReference, filter);
+  const result = await getDocs(q);
+  const ref = result.docs[0].ref;
+  if (collectionString === "cases" || collectionString === "phases") {
+    const nestedCollectionString =
+      collectionString === "cases" ? "patient" : "outcome";
+    await deleteNestedData(ref, nestedCollectionString);
+  } else {
+    await deleteDoc(ref);
+  }
+};
+
 export {
   getData,
   getCollection,
@@ -266,4 +291,5 @@ export {
   getCaseOnId,
   setCaseData,
   setTest,
+  deleteDataOnId,
 };

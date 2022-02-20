@@ -1,6 +1,6 @@
 <template>
   <el-row justify="space-between">
-    <el-col :span="12"><h3>Physical examination</h3></el-col>
+    <el-col :span="12"><h3>Additional diagnostic tests</h3></el-col>
     <el-col class="max-width" :span="12"
       ><PhaseToolbar
         @move-up="$emit('moveUp')"
@@ -11,7 +11,7 @@
     /></el-col>
   </el-row>
   <el-form label-position="top" class="container">
-    <el-form-item label="Performed physical examinations">
+    <el-form-item label="Performed diagnostig tests">
       <el-tag
         v-for="tag in value.caseData.phases[phaseIndex].answer"
         :key="tag"
@@ -36,11 +36,11 @@
         size="small"
         @click="showInput('answer')"
       >
-        + Add physical examination
+        + Add diagnostic test
       </el-button>
     </el-form-item>
     <el-form-item
-      label="Wrong physical examination options (for generating multiple choice)"
+      label="Wrong diagnostic test options (for generating multiple choice)"
     >
       <el-tag
         v-for="tag in value.caseData.phases[phaseIndex].wrongAnswer"
@@ -66,29 +66,23 @@
         size="small"
         @click="showInput('wrongAnswer')"
       >
-        + Add wrong physical examination
+        + Add wrong diagnostic test
       </el-button>
     </el-form-item>
-    <h4>Examination results</h4>
-    <el-row justify="space-between" :gutter="20">
-      <el-col :span="12"
-        ><el-switch
-          v-model="showVitalParameterInput"
-          class="mb-2"
-          active-text="Vital parameters"
-        ></el-switch
-      ></el-col>
+    <el-row justify="space-between">
+      <el-col :span="12">
+        <h4>Test results</h4>
+      </el-col>
       <el-col :span="12" class="max-width"
         ><Transition
           ><el-button
             v-show="showAddTestButton"
             @click="addTest"
             type="primary"
-            class="add-button"
             round
             size="small"
             small
-            >Examination result
+            >Test result
             <IconWrapper
               icon="plus"
               class="icon-button" /></el-button></Transition
@@ -101,79 +95,6 @@
       class="container"
       @before-leave="beforeLeave"
     >
-      <template v-if="showVitalParameterInput">
-        <div key="vital">
-          <el-row justify="space-between" :gutter="20">
-            <el-col :span="12">
-              <el-form-item label="Heart rate">
-                <el-input
-                  input-style="text-align: center;"
-                  v-model="value.caseData.phases[phaseIndex].outcome.heartRate"
-                  ><template #prefix>
-                    <IconWrapper
-                      icon="heart-pulse"
-                      class="icon-input" /></template
-                  ><template #append>bpm</template></el-input
-                >
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="Temperature">
-                <el-input
-                  input-style="text-align: center;"
-                  v-model="
-                    value.caseData.phases[phaseIndex].outcome.temperature
-                  "
-                  ><template #prefix>
-                    <IconWrapper
-                      icon="thermometer"
-                      class="icon-input" /></template
-                  ><template #append>°C</template></el-input
-                >
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="Blood pressure">
-                <el-input
-                  input-style="text-align: center;"
-                  v-model="
-                    value.caseData.phases[phaseIndex].outcome.bloodPressure
-                  "
-                  placeholder="low/high"
-                  ><template #prefix>
-                    <IconWrapper icon="heart" class="icon-input" /></template
-                  ><template #append>mmHg</template></el-input
-                >
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="Breathing frequency">
-                <el-input
-                  input-style="text-align: center;"
-                  v-model="value.caseData.phases[phaseIndex].outcome.breathRate"
-                  ><template #prefix>
-                    <IconWrapper icon="lungs" class="icon-input" /></template
-                  ><template #append>Hz</template></el-input
-                >
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="Blood saturation">
-                <el-input
-                  input-style="text-align: center;"
-                  v-model="
-                    value.caseData.phases[phaseIndex].outcome.bloodSaturation
-                  "
-                >
-                  <template #prefix>
-                    <IconWrapper icon="vial" class="icon-input" /></template
-                  ><template #append>%</template></el-input
-                >
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </div>
-      </template>
       <el-row
         v-if="showExtraTest1"
         key="extraTestName1"
@@ -182,7 +103,7 @@
         :style="{ 'max-width': '400px' }"
       >
         <el-col :span="10" class="max-width">
-          <el-form-item label="Examination type">
+          <el-form-item label="Test type">
             <el-input
               v-model="value.caseData.phases[phaseIndex].outcome.extraTestName1"
             ></el-input>
@@ -246,7 +167,7 @@
       </el-row>
       <el-form-item
         key="description"
-        label="Description of the obtained examination results"
+        label="Description of the obtained test results"
       >
         <el-input
           v-model="value.caseData.phases[phaseIndex].outcome.text"
@@ -294,7 +215,6 @@ export default {
         answer: "",
         wrongAnswer: "",
       },
-      showVitalParameterInput: false,
       showExtraTest1: false,
       showExtraTest2: false,
     };
@@ -400,9 +320,6 @@ export default {
 }
 .delete-button {
   margin-top: 10px;
-}
-.add-button {
-  margin-top: 5px;
 }
 .max-width {
   max-width: fit-content;

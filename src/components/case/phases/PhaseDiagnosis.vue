@@ -1,7 +1,7 @@
 <template>
   <el-row justify="space-between">
-    <el-col :span="12"><h3>Additional questions</h3></el-col>
-    <el-col class="to-right" :span="12"
+    <el-col :span="12"><h3>Diagnosis</h3></el-col>
+    <el-col class="max-width" :span="12"
       ><PhaseToolbar
         @move-up="$emit('moveUp')"
         @move-down="$emit('moveDown')"
@@ -11,9 +11,17 @@
     /></el-col>
   </el-row>
   <el-form label-position="top">
-    <el-form-item label="Important additional questions">
+    <el-form-item label="Diagnosis and explaination">
+      <el-input
+        v-model="value.caseData.phases[phaseIndex].answer[0]"
+        type="textarea"
+        autosize
+        resize="none"
+      ></el-input>
+    </el-form-item>
+    <el-form-item label="Wrong diagnosis (for generating multiple choice)">
       <el-tag
-        v-for="tag in value.caseData.phases[phaseIndex].answer"
+        v-for="tag in value.caseData.phases[phaseIndex].wrongAnswer"
         :key="tag"
         class="mx-1 tag"
         closable
@@ -36,24 +44,16 @@
         size="small"
         @click="showInput()"
       >
-        + Add additional question
+        + Add wrong diagnosis
       </el-button>
-    </el-form-item>
-    <el-form-item label="Answers on questions from patient">
-      <el-input
-        v-model="value.caseData.phases[phaseIndex].outcome.text"
-        type="textarea"
-        autosize
-        resize="none"
-      ></el-input>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
-import PhaseToolbar from "./PhaseToolbar.vue";
 export default {
   props: ["modelValue", "phaseIndex"],
+  emits: ["deletePhase", "moveUp", "moveDown"],
   data() {
     return {
       showTagInput: false,
@@ -70,15 +70,11 @@ export default {
       },
     },
   },
-  components: {
-    PhaseToolbar,
-  },
   mounted() {},
-  emits: ["deletePhase", "moveUp", "moveDown"],
   methods: {
     handleClose(tag) {
-      this.value.caseData.phases[this.phaseIndex].answer.splice(
-        this.value.caseData.phases[this.phaseIndex].answer.indexOf(tag),
+      this.value.caseData.phases[this.phaseIndex].wrongAnswer.splice(
+        this.value.caseData.phases[this.phaseIndex].wrongAnswer.indexOf(tag),
         1
       );
     },
@@ -92,7 +88,7 @@ export default {
     handleInputConfirm() {
       let tagValue = this.tagValue;
       if (tagValue) {
-        this.value.caseData.phases[this.phaseIndex].answer.push(tagValue);
+        this.value.caseData.phases[this.phaseIndex].wrongAnswer.push(tagValue);
       }
       this.showTagInput = false;
       this.tagValue = "";
@@ -103,7 +99,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.to-right {
+.max-width {
   max-width: fit-content;
 }
 </style>
