@@ -32,19 +32,23 @@ app
     console.log("An error occurred while retrieving token. ", err);
   });
 
-const messagingInstance = firebase.messaging(app);
+const messaging = firebase.messaging(app);
 
-messaging.setBackgroundMessageHandler(messagingInstance, (payload) => {
+messaging.setBackgroundMessageHandler(function (payload) {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
     payload
   );
   // Customize notification here
-  const notificationTitle = "Background Message Title";
-  const notificationOptions = {
-    body: "Background Message body.",
-    icon: "/firebase-logo.png",
+  var notification = payload.notification;
+  var notificationTitle = notification.title;
+  var notificationOptions = {
+    body: notification.body,
+    icon: "/static/images/logo.png",
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+  return self.registration.showNotification(
+    notificationTitle,
+    notificationOptions
+  );
 });
