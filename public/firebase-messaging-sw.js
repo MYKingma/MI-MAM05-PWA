@@ -34,7 +34,7 @@ app
 
 const messagingInstance = messaging.getMessaging(app);
 
-messaging.onBackgroundMessage(messagingInstance, (payload) => {
+messaging.setBackgroundMessageHandler(messagingInstance, (payload) => {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
     payload
