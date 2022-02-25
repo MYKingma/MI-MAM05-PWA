@@ -31,3 +31,19 @@ app
   .catch((err) => {
     console.log("An error occurred while retrieving token. ", err);
   });
+
+const messaging = firebase.getMessaging();
+firebase.onBackgroundMessage(messaging, (payload) => {
+  console.log(
+    "[firebase-messaging-sw.js] Received background message ",
+    payload
+  );
+  // Customize notification here
+  const notificationTitle = "Background Message Title";
+  const notificationOptions = {
+    body: "Background Message body.",
+    icon: "/firebase-logo.png",
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
