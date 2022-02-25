@@ -1,5 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getMessaging, onBackgroundMessage } from "firebase/messaging/sw";
+importScripts("https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/8.2.7/firebase-messaging.js");
 
 const firebaseConfig = {
   apiKey: "AIzaSyBEMVdOJ5nrGwKdRFSJn7_uob7hFDr1luc",
@@ -11,7 +11,7 @@ const firebaseConfig = {
   measurementId: "G-PNLPZ384M8",
 };
 
-const app = initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
 
 app
   .messaging()
@@ -32,9 +32,9 @@ app
     console.log("An error occurred while retrieving token. ", err);
   });
 
-const messaging = getMessaging(app);
+const messagingInstance = messaging.getMessaging(app);
 
-onBackgroundMessage(messaging, (payload) => {
+messaging.onBackgroundMessage(messagingInstance, (payload) => {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
     payload
