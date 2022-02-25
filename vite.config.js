@@ -51,9 +51,9 @@ export default defineConfig({
         gcm_sender_id:
           "BBP2ovYHYAJxmRGuY10yQy3u6Cztlmm7TfWKYBoEDB61MWfu_QAAeIrLgVMxF3krQZ43h0VKSFuLyI_6OjS89BI",
       },
-      workbox: {
-        importScripts: ["firebase-messaging-sw.js"],
-      },
+      // workbox: {
+      //   importScripts: ["firebase-messaging-sw.js"],
+      // },
       // workbox: {
       //   cacheId: "MI-MAM05-PWA",
       //   runtimeCaching: [
