@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <h1>End</h1>
-    <el-form label-width="200px" style="max-width: 800px" label-position="top">
+    <el-form @submit.prevent label-width="200px" style="max-width: 800px" label-position="top">
       <el-form-item
         label="To what extend would you recommend this case to other students like you?"
       >

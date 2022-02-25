@@ -3,7 +3,25 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { getMessaging } from "firebase/messaging";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import "element-plus/es/components/notification/style/index";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faTrashAlt,
+  faPlus,
+  faHeart,
+  faThermometer,
+  faLungs,
+  faVial,
+  faHeartPulse,
+  faVials,
+  faCloudArrowUp,
+  faFloppyDisk,
+  faAngleUp,
+  faAngleDown,
+  faAngleLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 import App from "./App.vue";
 import router from "./router";
@@ -17,9 +35,26 @@ if (
   if (!navigator.serviceWorker.controller) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("/sw.js");
+      navigator.serviceWorker.register("/firebase-messaging-sw.js");
     });
   }
 }
+
+library.add(
+  faTrashAlt,
+  faPlus,
+  faHeart,
+  faThermometer,
+  faLungs,
+  faVial,
+  faHeartPulse,
+  faVials,
+  faCloudArrowUp,
+  faFloppyDisk,
+  faAngleUp,
+  faAngleDown,
+  faAngleLeft
+);
 
 const app = createApp(App);
 
@@ -40,6 +75,9 @@ const db = getFirestore();
 const storage = getStorage();
 enableIndexedDbPersistence(db);
 
+const message = getMessaging();
+app.config.globalProperties.$messaging = message;
+
 auth.onAuthStateChanged((user) => {
   store.dispatch("fetchUser", user);
 });
@@ -50,4 +88,4 @@ app.use(store);
 
 app.mount("#app");
 
-export { db, auth, storage };
+export { db, auth, storage, message };

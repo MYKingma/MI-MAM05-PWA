@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <h1>Diagnosis</h1>
-    <el-form label-width="200px" style="max-width: 800px" label-position="top">
+    <el-form @submit.prevent label-width="200px" style="max-width: 800px" label-position="top">
       <el-form-item label="What would the most likely diagnosis be?">
         <el-checkbox
           v-for="item in mockData.case.answer

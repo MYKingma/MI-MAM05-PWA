@@ -1,27 +1,30 @@
 <template>
   <el-row justify="space-between">
-    <el-col :span="12"><h3>Diagnosis</h3></el-col>
+    <el-col :span="12"><h3>Treatment</h3></el-col>
     <el-col class="max-width" :span="12"
       ><PhaseToolbar
         @move-up="$emit('moveUp')"
         @move-down="$emit('moveDown')"
         @delete-phase="$emit('deletePhase')"
         :index="phaseIndex"
-        :length="value.caseData.phases.length"
+        :length="value.phases.length"
     /></el-col>
   </el-row>
-  <el-form label-position="top">
-    <el-form-item label="Diagnosis and explaination">
+  <el-form @submit.prevent label-position="top">
+    <el-form-item label="Recommended treatment and explaination">
       <el-input
-        v-model="value.caseData.phases[phaseIndex].answer[0]"
+        v-model="value.phases[phaseIndex].answer[0]"
         type="textarea"
+        class="textarea"
         autosize
         resize="none"
       ></el-input>
     </el-form-item>
-    <el-form-item label="Wrong diagnosis (for generating multiple choice)">
+    <el-form-item
+      label="Wrong treatment options (for generating multiple choice)"
+    >
       <el-tag
-        v-for="tag in value.caseData.phases[phaseIndex].wrongAnswer"
+        v-for="tag in value.phases[phaseIndex].wrongAnswer"
         :key="tag"
         class="mx-1 tag"
         closable
@@ -44,7 +47,7 @@
         size="small"
         @click="showInput()"
       >
-        + Add wrong diagnosis
+        + Add wrong treatment
       </el-button>
     </el-form-item>
   </el-form>
@@ -73,8 +76,8 @@ export default {
   mounted() {},
   methods: {
     handleClose(tag) {
-      this.value.caseData.phases[this.phaseIndex].wrongAnswer.splice(
-        this.value.caseData.phases[this.phaseIndex].wrongAnswer.indexOf(tag),
+      this.value.phases[this.phaseIndex].wrongAnswer.splice(
+        this.value.phases[this.phaseIndex].wrongAnswer.indexOf(tag),
         1
       );
     },
@@ -88,7 +91,7 @@ export default {
     handleInputConfirm() {
       let tagValue = this.tagValue;
       if (tagValue) {
-        this.value.caseData.phases[this.phaseIndex].wrongAnswer.push(tagValue);
+        this.value.phases[this.phaseIndex].wrongAnswer.push(tagValue);
       }
       this.showTagInput = false;
       this.tagValue = "";
@@ -101,5 +104,8 @@ export default {
 <style lang="scss" scoped>
 .max-width {
   max-width: fit-content;
+}
+.textarea {
+  max-width: 725px;
 }
 </style>

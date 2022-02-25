@@ -7,13 +7,13 @@
         @move-down="$emit('moveDown')"
         @delete-phase="$emit('deletePhase')"
         :index="phaseIndex"
-        :length="value.caseData.phases.length"
+        :length="value.phases.length"
     /></el-col>
   </el-row>
-  <el-form label-position="top" class="container">
+  <el-form @submit.prevent label-position="top" class="container">
     <el-form-item label="Performed diagnostig tests">
       <el-tag
-        v-for="tag in value.caseData.phases[phaseIndex].answer"
+        v-for="tag in value.phases[phaseIndex].answer"
         :key="tag"
         class="mx-1 tag"
         closable
@@ -43,7 +43,7 @@
       label="Wrong diagnostic test options (for generating multiple choice)"
     >
       <el-tag
-        v-for="tag in value.caseData.phases[phaseIndex].wrongAnswer"
+        v-for="tag in value.phases[phaseIndex].wrongAnswer"
         :key="tag"
         class="mx-1 tag"
         closable
@@ -105,7 +105,7 @@
         <el-col :span="10" class="max-width">
           <el-form-item label="Test type">
             <el-input
-              v-model="value.caseData.phases[phaseIndex].outcome.extraTestName1"
+              v-model="value.phases[phaseIndex].outcome.extraTestName1"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -113,9 +113,7 @@
           <el-form-item label="Result">
             <el-input
               placeholder="Include units"
-              v-model="
-                value.caseData.phases[phaseIndex].outcome.extraTestValue1
-              "
+              v-model="value.phases[phaseIndex].outcome.extraTestValue1"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -123,11 +121,11 @@
           <el-button
             type="danger"
             class="delete-button"
-            :icon="Delete"
             @click="deleteExtraTest(1)"
             circle
             size="small"
-          ></el-button>
+            ><IconWrapper icon="trash-alt"
+          /></el-button>
         </el-col>
       </el-row>
       <el-row
@@ -140,7 +138,7 @@
         <el-col :span="10" class="max-width">
           <el-form-item label="Test type">
             <el-input
-              v-model="value.caseData.phases[phaseIndex].outcome.extraTestName2"
+              v-model="value.phases[phaseIndex].outcome.extraTestName2"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -148,9 +146,7 @@
           <el-form-item label="Result">
             <el-input
               placeholder="Include units"
-              v-model="
-                value.caseData.phases[phaseIndex].outcome.extraTestValue2
-              "
+              v-model="value.phases[phaseIndex].outcome.extraTestValue2"
             ></el-input>
           </el-form-item>
         </el-col>
@@ -162,7 +158,8 @@
             @click="deleteExtraTest(2)"
             circle
             size="small"
-          ></el-button>
+            ><IconWrapper icon="trash-alt"
+          /></el-button>
         </el-col>
       </el-row>
       <el-form-item
@@ -170,8 +167,9 @@
         label="Description of the obtained test results"
       >
         <el-input
-          v-model="value.caseData.phases[phaseIndex].outcome.text"
+          v-model="value.phases[phaseIndex].outcome.text"
           type="textarea"
+          class="textarea"
           autosize
           resize="none"
         ></el-input>
@@ -181,27 +179,6 @@
 </template>
 
 <script>
-import { Delete } from "@element-plus/icons-vue";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faHeart,
-  faThermometer,
-  faLungs,
-  faVial,
-  faHeartPulse,
-  faPlus,
-  faVials,
-} from "@fortawesome/free-solid-svg-icons";
-
-library.add(
-  faHeart,
-  faThermometer,
-  faLungs,
-  faVial,
-  faHeartPulse,
-  faPlus,
-  faVials
-);
 export default {
   props: ["modelValue", "phaseIndex"],
   emits: ["deletePhase", "moveUp", "moveDown"],
@@ -228,12 +205,9 @@ export default {
         this.$emit("update:modelValue", value);
       },
     },
-    Delete() {
-      return Delete;
-    },
     showAddTestButton() {
       if (
-        this.value.caseData.phases[this.phaseIndex].outcome.extraTestName1 ||
+        this.value.phases[this.phaseIndex].outcome.extraTestName1 ||
         this.showExtraTest1
       ) {
         this.setShow(1, true);
@@ -241,7 +215,7 @@ export default {
         this.setShow(1, false);
       }
       if (
-        this.value.caseData.phases[this.phaseIndex].outcome.extraTestName2 ||
+        this.value.phases[this.phaseIndex].outcome.extraTestName2 ||
         this.showExtraTest2
       ) {
         this.setShow(2, true);
@@ -261,8 +235,8 @@ export default {
       this[`showExtraTest${number}`] = value;
     },
     handleClose(type, tag) {
-      this.value.caseData.phases[this.phaseIndex][type].splice(
-        this.value.caseData.phases[this.phaseIndex][type].indexOf(tag),
+      this.value.phases[this.phaseIndex][type].splice(
+        this.value.phases[this.phaseIndex][type].indexOf(tag),
         1
       );
     },
@@ -275,7 +249,7 @@ export default {
     handleInputConfirm(type) {
       let tagValue = this.tagValue[type];
       if (tagValue) {
-        this.value.caseData.phases[this.phaseIndex][type].push(tagValue);
+        this.value.phases[this.phaseIndex][type].push(tagValue);
       }
       this.showTagInput[type] = false;
       this.tagValue[type] = "";
@@ -288,12 +262,10 @@ export default {
       }
     },
     deleteExtraTest(number) {
-      this.value.caseData.phases[this.phaseIndex].outcome[
-        `extraTestName${number}`
-      ] = null;
-      this.value.caseData.phases[this.phaseIndex].outcome[
-        `extraTestValue${number}`
-      ] = null;
+      this.value.phases[this.phaseIndex].outcome[`extraTestName${number}`] =
+        null;
+      this.value.phases[this.phaseIndex].outcome[`extraTestValue${number}`] =
+        null;
       this[`showExtraTest${number}`] = false;
     },
     beforeLeave(el) {
@@ -317,6 +289,9 @@ export default {
   * > * {
     overflow: hidden;
   }
+}
+.textarea {
+  max-width: 725px;
 }
 .delete-button {
   margin-top: 10px;

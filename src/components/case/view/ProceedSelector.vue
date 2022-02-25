@@ -1,12 +1,13 @@
 <template>
+  <h3>How would you proceed?</h3>
   <el-row class="select-phase-wrapper" justify="space-between">
-    <el-col :span="12">
-      <el-form :inline="true">
-        <el-form-item label="Add next phase">
+    <el-col :span="10">
+      <el-form @submit.prevent :inline="true">
+        <el-form-item>
           <el-select
             class="select-phase"
             v-model="selectedPhase"
-            placeholder="Select phase type"
+            placeholder="Select phase"
           >
             <el-option
               v-for="phase in phases"
@@ -19,21 +20,28 @@
     </el-col>
     <el-col :span="12" class="max-width"
       ><el-button
-        @click="selectPhase"
+        @click="selectProceed"
         :disabled="selectedPhase === null"
         type="primary"
         round
         size="small"
-        :icon="Plus"
-      ></el-button
-    ></el-col>
+        >Submit</el-button
+      ></el-col
+    >
   </el-row>
 </template>
 
 <script>
-import { Plus } from "@element-plus/icons-vue";
 export default {
-  props: {},
+  emits: ["proceed"],
+  props: {
+    phaseData: {
+      type: Array,
+    },
+    phaseIndex: {
+      type: Number,
+    },
+  },
   data() {
     return {
       phases: [
@@ -42,21 +50,27 @@ export default {
         "Additional diagnostic tests",
         "Diagnosis",
         "Treatment",
-        "Endcase",
       ],
       selectedPhase: null,
+      validation: null,
     };
   },
-  computed: {
-    Plus() {
-      return Plus;
-    },
-  },
+  computed: {},
   mounted() {},
   methods: {
-    selectPhase() {
-      this.$emit("selectPhase", this.selectedPhase);
+    selectProceed() {
+      if (
+        this.phaseData[this.phaseIndex].type.toLowerCase() ===
+        this.selectedPhase.toLowerCase().replace(" ", "")
+      ) {
+        console.log("CORRECT");
+      } else {
+        console.log("FALSE");
+      }
       this.selectedPhase = null;
+    },
+    proceed() {
+      this.$emit("proceed");
     },
   },
   watch: {},

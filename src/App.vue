@@ -22,10 +22,11 @@
         {{ user.role || "null" }}
       </p> -->
       <div>
-        <el-button @click="test">TEST</el-button>
+        <el-button @click="$router.push('/overview')">Overviewpage</el-button>
         <el-button @click="$router.push('/physician/case/edit')"
           >Editpage</el-button
         >
+        <el-button @click="$router.push('/physician/case')">CasePage</el-button>
         <el-button v-if="!user.name" @click="$router.push('/register')"
           >Register</el-button
         >

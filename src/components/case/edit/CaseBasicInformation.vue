@@ -1,10 +1,10 @@
 <template>
   <h3>Basic information</h3>
-  <el-form :inline="true" label-position="top">
+  <el-form @submit.prevent :inline="true" label-position="top">
     <el-form-item label="Specialism">
-      <el-select class="input" v-model="value.caseData.specialism">
+      <el-select class="input" v-model="value.specialism">
         <el-option
-          v-for="item in value.specialisms"
+          v-for="item in specialisms"
           :label="item.name"
           :value="item.name"
           :key="item.id"
@@ -12,31 +12,29 @@
       </el-select>
     </el-form-item>
     <el-form-item label="Main problem">
-      <el-input class="input" v-model="value.caseData.mainProblem"></el-input>
+      <el-input class="input" v-model="value.mainProblem"></el-input>
     </el-form-item>
     <el-form-item label="Date">
-      <el-date-picker
-        v-model="value.caseData.date"
-        type="date"
-      ></el-date-picker>
+      <el-date-picker v-model="value.date" type="date"></el-date-picker>
     </el-form-item>
   </el-form>
-  <el-form label-position="top">
+  <el-form @submit.prevent label-position="top">
     <el-form-item label="Introduction">
       <el-input
-        v-model="value.caseData.introduction"
+        v-model="value.introduction"
         type="textarea"
         autosize
         resize="none"
+        class="textarea"
       ></el-input>
     </el-form-item>
   </el-form>
   <h3>Patient information</h3>
-  <el-form :inline="true" label-position="top">
+  <el-form @submit.prevent :inline="true" label-position="top">
     <el-form-item label="Gender">
-      <el-select class="input" v-model="value.caseData.patient.gender">
+      <el-select class="input" v-model="value.patient.gender">
         <el-option
-          v-for="item in value.genders"
+          v-for="item in genders"
           :label="item"
           :key="item.id"
           :value="item"
@@ -46,21 +44,18 @@
     <el-form-item label="Age">
       <el-input
         class="input"
-        v-model="value.caseData.patient.age"
+        v-model="value.patient.age"
         type="number"
       ></el-input>
     </el-form-item>
     <el-form-item label="Etnicity">
-      <el-input
-        class="input"
-        v-model="value.caseData.patient.ethnicity"
-      ></el-input>
+      <el-input class="input" v-model="value.patient.ethnicity"></el-input>
     </el-form-item>
   </el-form>
-  <el-form label-position="top">
+  <el-form @submit.prevent label-position="top">
     <el-form-item label="Medical history">
       <el-tag
-        v-for="tag in value.caseData.patient.medicalHistory"
+        v-for="tag in value.patient.medicalHistory"
         :key="tag"
         class="mx-1 tag"
         closable
@@ -88,7 +83,7 @@
     </el-form-item>
     <el-form-item label="Medication">
       <el-tag
-        v-for="tag in value.caseData.patient.medication"
+        v-for="tag in value.patient.medication"
         :key="tag"
         class="mx-1 tag"
         closable
@@ -118,6 +113,7 @@
 </template>
 
 <script>
+import { getData } from "../../../db";
 export default {
   props: ["modelValue"],
   computed: {
@@ -132,6 +128,8 @@ export default {
   },
   data() {
     return {
+      genders: ["Male", "Female", "Other"],
+      specialisms: [],
       showTagInput: {
         medicalHistory: false,
         medication: false,
@@ -142,13 +140,12 @@ export default {
       },
     };
   },
-  mounted() {},
+  async mounted() {
+    this.specialisms = await getData("specialisms");
+  },
   methods: {
     handleClose(type, tag) {
-      this.value.caseData.patient[type].splice(
-        this.value.caseData.patient[type].indexOf(tag),
-        1
-      );
+      this.value.patient[type].splice(this.value.patient[type].indexOf(tag), 1);
     },
 
     showInput(type) {
@@ -161,7 +158,7 @@ export default {
     handleInputConfirm(type) {
       let tagValue = this.tagValue[type];
       if (tagValue) {
-        this.value.caseData.patient[type].push(tagValue);
+        this.value.patient[type].push(tagValue);
       }
       this.showTagInput[type] = false;
       this.tagValue[type] = "";
@@ -174,5 +171,8 @@ export default {
 <style lang="scss" scoped>
 .input {
   width: 220px;
+}
+.textarea {
+  max-width: 725px;
 }
 </style>

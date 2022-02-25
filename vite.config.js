@@ -19,7 +19,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     VitePWA({
-      // mode: "development",
+      mode: "development",
       base: "/",
       includeAssets: [
         "favicon.svg",

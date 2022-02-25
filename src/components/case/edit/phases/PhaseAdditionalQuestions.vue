@@ -1,29 +1,19 @@
 <template>
   <el-row justify="space-between">
-    <el-col :span="12"><h3>Treatment</h3></el-col>
-    <el-col class="max-width" :span="12"
+    <el-col :span="12"><h3>Additional questions</h3></el-col>
+    <el-col class="to-right" :span="12"
       ><PhaseToolbar
         @move-up="$emit('moveUp')"
         @move-down="$emit('moveDown')"
         @delete-phase="$emit('deletePhase')"
         :index="phaseIndex"
-        :length="value.caseData.phases.length"
+        :length="value.phases.length"
     /></el-col>
   </el-row>
-  <el-form label-position="top">
-    <el-form-item label="Recommended treatment and explaination">
-      <el-input
-        v-model="value.caseData.phases[phaseIndex].answer[0]"
-        type="textarea"
-        autosize
-        resize="none"
-      ></el-input>
-    </el-form-item>
-    <el-form-item
-      label="Wrong treatment options (for generating multiple choice)"
-    >
+  <el-form @submit.prevent label-position="top">
+    <el-form-item label="Important additional questions">
       <el-tag
-        v-for="tag in value.caseData.phases[phaseIndex].wrongAnswer"
+        v-for="tag in value.phases[phaseIndex].answer"
         :key="tag"
         class="mx-1 tag"
         closable
@@ -46,16 +36,25 @@
         size="small"
         @click="showInput()"
       >
-        + Add wrong treatment
+        + Add additional question
       </el-button>
+    </el-form-item>
+    <el-form-item label="Answers on questions from patient">
+      <el-input
+        v-model="value.phases[phaseIndex].outcome.text"
+        type="textarea"
+        class="textarea"
+        autosize
+        resize="none"
+      ></el-input>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
+import PhaseToolbar from "./PhaseToolbar.vue";
 export default {
   props: ["modelValue", "phaseIndex"],
-  emits: ["deletePhase", "moveUp", "moveDown"],
   data() {
     return {
       showTagInput: false,
@@ -72,11 +71,15 @@ export default {
       },
     },
   },
+  components: {
+    PhaseToolbar,
+  },
   mounted() {},
+  emits: ["deletePhase", "moveUp", "moveDown"],
   methods: {
     handleClose(tag) {
-      this.value.caseData.phases[this.phaseIndex].wrongAnswer.splice(
-        this.value.caseData.phases[this.phaseIndex].wrongAnswer.indexOf(tag),
+      this.value.phases[this.phaseIndex].answer.splice(
+        this.value.phases[this.phaseIndex].answer.indexOf(tag),
         1
       );
     },
@@ -90,7 +93,7 @@ export default {
     handleInputConfirm() {
       let tagValue = this.tagValue;
       if (tagValue) {
-        this.value.caseData.phases[this.phaseIndex].wrongAnswer.push(tagValue);
+        this.value.phases[this.phaseIndex].answer.push(tagValue);
       }
       this.showTagInput = false;
       this.tagValue = "";
@@ -101,7 +104,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.max-width {
+.to-right {
   max-width: fit-content;
+}
+.textarea {
+  max-width: 725px;
 }
 </style>

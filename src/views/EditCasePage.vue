@@ -1,11 +1,22 @@
 <template>
-  <el-main v-if="caseLoaded">
-    <h1 @click="test">Edit case</h1>
+  <el-main>
+    <el-row class="header-row" justify="space-between" align="middle">
+      <el-col :span="12"><h1>Edit case</h1></el-col>
+      <el-col class="max-width" :span="12">
+        <CaseToolbar />
+      </el-col>
+    </el-row>
     <div class="box">
-      <CaseBasicInformation v-model="caseEditData" />
+      <CaseBasicInformation v-model="caseData" />
+      <ImageSelector @select-image="selectImage" />
+      <ImagePreview
+        :upload="true"
+        :images="caseData.images"
+        @delete-image="deleteImage"
+      />
     </div>
     <draggable
-      v-model="caseEditData.caseData.phases"
+      v-model="caseData.phases"
       tag="transition-group"
       item-key="id"
       :sort="false"
@@ -18,14 +29,21 @@
       }"
     >
       <template #item="{ element, index }">
-        <div class="box">
+        <div class="box no-m-bottom">
           <component
-            v-model="caseEditData"
+            v-model="caseData"
             :phaseIndex="index"
             :is="`Phase${element.type}`"
-            @move-up="movePhaseUp(index)"
-            @move-down="movePhaseDown(index)"
-            @delete-phase="deletePhase(index)"
+            @move-up="movePhase({ phaseIndex: index, direction: 'up' })"
+            @move-down="movePhase({ phaseIndex: index, direction: 'down' })"
+            @delete-phase="deletePhaseFromGroup(index)"
+          />
+          <ImageSelector :phaseIndex="index" @select-image="selectImage" />
+          <ImagePreview
+            :upload="true"
+            :images="element.images"
+            :phaseIndex="index"
+            @delete-image="deleteImage"
           />
         </div>
       </template>
@@ -42,44 +60,23 @@
 
 <script>
 import draggable from "vuedraggable";
+import { mapActions, mapGetters } from "vuex";
 
-import CaseBasicInformation from "../components/case/CaseBasicInformation.vue";
-import PhaseAdditionalQuestions from "../components/case/phases/PhaseAdditionalQuestions.vue";
-import PhasePhysicalExamination from "../components/case/phases/PhasePhysicalExamination.vue";
-import PhaseAdditionalDiagnosticTests from "../components/case/phases/PhaseAdditionalDiagnosticTests.vue";
-import PhaseDiagnosis from "../components/case/phases/PhaseDiagnosis.vue";
-import PhaseTreatment from "../components/case/phases/PhaseTreatment.vue";
-import PhaseSelector from "../components/case/phases/PhaseSelector.vue";
-
-import { getCaseOnId, getData, setCaseData, deleteDataOnId } from "../db";
+import CaseBasicInformation from "../components/case/edit/CaseBasicInformation.vue";
+import PhaseAdditionalQuestions from "../components/case/edit/phases/PhaseAdditionalQuestions.vue";
+import PhasePhysicalExamination from "../components/case/edit/phases/PhasePhysicalExamination.vue";
+import PhaseAdditionalDiagnosticTests from "../components/case/edit/phases/PhaseAdditionalDiagnosticTests.vue";
+import PhaseDiagnosis from "../components/case/edit/phases/PhaseDiagnosis.vue";
+import PhaseTreatment from "../components/case/edit/phases/PhaseTreatment.vue";
+import PhaseSelector from "../components/case/edit/phases/PhaseSelector.vue";
+import ImageSelector from "../components/ImageSelector.vue";
+import ImagePreview from "../components/ImagePreview.vue";
+import CaseToolbar from "../components/case/edit/CaseToolbar.vue";
+// import { ElNotification } from "element-plus";
 
 export default {
   data() {
-    return {
-      caseLoaded: false,
-      caseEditData: {
-        caseData: {
-          date: null,
-          specialism: "",
-          mainProblem: "",
-          introduction: null,
-          patient: {
-            age: null,
-            ethnicity: "",
-            gender: "",
-            id: "",
-            medicalHistory: [],
-            medication: [],
-          },
-          images: [],
-          phases: [],
-          uid: "",
-          id: "",
-        },
-        specialisms: [],
-        genders: ["Male", "Female", "Other"],
-      },
-    };
+    return {};
   },
   components: {
     CaseBasicInformation,
@@ -90,49 +87,75 @@ export default {
     PhaseTreatment,
     PhaseSelector,
     draggable,
+    ImageSelector,
+    ImagePreview,
+    CaseToolbar,
   },
   computed: {
-    caseData() {
-      return this.caseEditData.caseData;
-    },
+    ...mapGetters({
+      caseData: "currentCase",
+    }),
     showSelector() {
+      if (!this.caseData.phases.length) return true;
       return (
-        this.caseEditData.caseData.phases[
-          this.caseEditData.caseData.phases.length - 1
-        ].type !== "Treatment"
+        this.caseData.phases[this.caseData.phases.length - 1].type !==
+        "Treatment"
       );
     },
   },
   async mounted() {
-    const caseDataTest = await getCaseOnId("efSvC2nU2IAh8jARpz1t");
-    this.caseEditData.caseData = caseDataTest;
-    console.log(caseDataTest);
-    this.caseEditData.specialisms = await getData("specialisms");
-    this.caseLoaded = true;
+    // ElNotification({
+    //   title: "Title",
+    //   message: "This is a reminder",
+    //   type: "success",
+    //   showClose: false,
+    // });
   },
   methods: {
-    async movePhaseUp(index) {
-      this.caseEditData.caseData = await getCaseOnId("efSvC2nU2IAh8jARpz1t");
-      const phase = this.caseEditData.caseData.phases[index];
-      this.caseEditData.caseData.phases.splice(index, 1);
-      this.caseEditData.caseData.phases.splice(index - 1, 0, phase);
+    ...mapActions([
+      "movePhase",
+      "deletePhase",
+      "saveDraftCurrentCase",
+      "publishCase",
+    ]),
+    deletePhaseFromGroup(index) {
+      const el = document.getElementsByClassName("box")[index + 1];
+      const { marginLeft, marginTop, width, height } =
+        window.getComputedStyle(el);
+      el.style.left = `${el.offsetLeft - parseFloat(marginLeft, 10)}px`;
+      el.style.top = `${el.offsetTop - parseFloat(marginTop, 10)}px`;
+      el.style.width = width;
+      el.style.height = height;
+      this.deletePhase(index);
     },
-    async movePhaseDown(index) {
-      this.caseEditData.caseData = await getCaseOnId("efSvC2nU2IAh8jARpz1t");
-      const phase = this.caseEditData.caseData.phases[index];
-      this.caseEditData.caseData.phases.splice(index, 1);
-      this.caseEditData.caseData.phases.splice(index + 1, 0, phase);
-    },
-    async deletePhase(index) {
-      this.caseEditData.caseData = await getCaseOnId("efSvC2nU2IAh8jARpz1t");
-      const id = this.caseEditData.caseData.phases.splice(index, 1)[0].id;
-      deleteDataOnId("phases", id);
-    },
-    test() {
-      deleteDataOnId("phases", "jtYx4lsvSjQsv3JwMaaD");
+    deleteCase() {
+      console.log("DELETE");
     },
     selectPhase(selectedPhase) {
-      this.caseEditData.caseData.phases.push(this.getCaseObject(selectedPhase));
+      this.caseData.phases.push(this.getCaseObject(selectedPhase));
+    },
+    selectImage(imageArray) {
+      if (imageArray[0].phaseIndex === false) {
+        imageArray.forEach((image) => {
+          this.caseData.images.push({ base64: image.base64 });
+        });
+      } else {
+        imageArray.forEach((image) => {
+          this.caseData.phases[image.phaseIndex].images.push({
+            base64: image.base64,
+          });
+        });
+      }
+    },
+    deleteImage(imageObject) {
+      if (imageObject.phaseIndex === false) {
+        this.caseData.images.splice(imageObject.imageIndex, 1);
+      } else {
+        this.caseData.phases[imageObject.phaseIndex].images.splice(
+          imageObject.imageIndex,
+          1
+        );
+      }
     },
     beforeLeave(el) {
       const { marginLeft, marginTop, width, height } =
@@ -217,7 +240,7 @@ export default {
   watch: {
     caseData: {
       handler: async function () {
-        await setCaseData(this.caseEditData.caseData);
+        this.$store.commit("SET_CURRENT_CASE", this.caseData);
       },
       deep: true,
     },
@@ -233,6 +256,13 @@ export default {
   padding: 5px 10px;
   margin: 5px 0px;
   max-width: 778px;
+}
+.header-row {
+  max-width: 778px;
+}
+
+.max-width {
+  max-width: fit-content;
 }
 
 .container {

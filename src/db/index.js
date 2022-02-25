@@ -153,8 +153,7 @@ const addNestedData = async (parentRef, collectionString, data) => {
 
 const getCaseOnId = async (caseID) => {
   const data = await getDataOnId("cases", caseID);
-  const formattedDate = new Date(data.date.seconds * 1000);
-  data.date = formattedDate;
+  if (data.date) data.date = new Date(data.date.seconds * 1000);
   data.phases = await getDataArrayOnIds("phases", data.phases);
   return data;
 };
@@ -253,6 +252,7 @@ const setCaseData = async (caseData) => {
     ? await getNestedRefOnId(caseRef, "patient", caseData.patient.id)
     : await addNestedData(caseRef, "patient", newPatientData);
   await updateData(patientRef, newPatientData);
+  return caseRef.id;
 };
 
 const deleteNestedData = async (parentRef, nestedCollectionString) => {
@@ -279,6 +279,14 @@ const deleteDataOnId = async (collectionString, value) => {
   }
 };
 
+const deleteCaseOnId = async (caseId) => {
+  const caseData = await getDataOnId("cases", caseId);
+  await caseData.phases.forEach(async (phase) => {
+    await deleteDataOnId("phases", phase.id);
+  });
+  deleteDataOnId("cases", caseId);
+};
+
 export {
   getData,
   getCollection,
@@ -292,4 +300,5 @@ export {
   setCaseData,
   setTest,
   deleteDataOnId,
+  deleteCaseOnId,
 };

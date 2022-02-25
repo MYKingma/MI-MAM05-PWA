@@ -73,11 +73,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.el-input__prefix-inner > svg {
-  margin-top: 8px;
-}
-.el-button > span > .svg-inline--fa {
+.icon-button {
   margin-left: 5px;
+}
+
+.icon-button-right {
+  margin-right: 5px;
 }
 
 .tag {

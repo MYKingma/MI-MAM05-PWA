@@ -1,7 +1,11 @@
 <template>
   <el-main>
     <h1>Additional diagnostic tests</h1>
-    <el-form label-width="200px" style="max-width: 800px" label-position="top">
+    <el-form
+      @submit.prevent label-width="200px"
+      style="max-width: 800px"
+      label-position="top"
+    >
       <el-form-item
         label="What additional diagnostic tests would you do/order?"
       >
