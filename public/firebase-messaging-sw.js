@@ -32,7 +32,7 @@ app
     console.log("An error occurred while retrieving token. ", err);
   });
 
-const messagingInstance = messaging.getMessaging(app);
+const messagingInstance = firebase.messaging(app);
 
 messaging.setBackgroundMessageHandler(messagingInstance, (payload) => {
   console.log(
