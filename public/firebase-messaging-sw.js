@@ -32,8 +32,7 @@ app
     console.log("An error occurred while retrieving token. ", err);
   });
 
-const messaging = firebase.getMessaging();
-firebase.onBackgroundMessage(messaging, (payload) => {
+firebase.onBackgroundMessage(app.messaging(), (payload) => {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
     payload
