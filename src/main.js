@@ -35,7 +35,6 @@ if (
   if (!navigator.serviceWorker.controller) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("/sw.js");
-      navigator.serviceWorker.register("/firebase-messaging-sw.js");
     });
   }
 }
