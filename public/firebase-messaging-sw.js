@@ -21,11 +21,11 @@ messaging.setBackgroundMessageHandler(function (payload) {
     payload
   );
   // Customize notification here
-  var notification = payload.notification;
+  var notification = payload.data;
   var notificationTitle = notification.title;
   var notificationOptions = {
     body: notification.body,
-    icon: "/pwa-512x512.png",
+    icon: "https://mi-mam05.netlify.app/pwa-512x512.png",
   };
 
   return self.registration.showNotification(
@@ -45,7 +45,7 @@ self.addEventListener("notificationclick", function (event) {
         var client = windowClients[i];
         // If so, just focus it.
         if (client.url.contains("mi-mam05") && "focus" in client) {
-          return client.navigate(url);
+          return client.focus();
         }
       }
       // If not, then open the target URL in a new window/tab.
