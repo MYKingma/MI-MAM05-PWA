@@ -45,16 +45,30 @@
         <p>uid: {{ caseData.uid }}</p>
       </div>
     </template>
+    <br />
+    <br />
+    <div>
+      <h4>Subscribe</h4>
+      <p
+        v-for="categ in categories"
+        :key="categ"
+        @click="subscribe(categ.name)"
+      >
+        {{ categ.name }}
+      </p>
+    </div>
   </el-main>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { getData } from "../db";
+import { subscibeToNotifications } from "../firebase";
 export default {
   data() {
     return {
       onlineCases: [],
+      categories: [],
     };
   },
   computed: {
@@ -62,9 +76,13 @@ export default {
   },
   async mounted() {
     this.onlineCases = await getData("cases");
+    this.categories = await getData("specialisms");
   },
   methods: {
     ...mapActions(["newCase", "selectCase"]),
+    subscribe(categ) {
+      subscibeToNotifications(categ);
+    },
   },
   watch: {},
 };

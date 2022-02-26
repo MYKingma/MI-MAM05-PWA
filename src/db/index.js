@@ -54,6 +54,7 @@ const getDataOnId = async (collectionString, value) => {
   const filter = where(documentId(), "==", value);
   const q = query(collectionReference, filter);
   const result = await getDocs(q);
+  console.log(collectionString, value, result);
   const data = result.docs[0].data();
   if (collectionString === "cases" || collectionString === "phases") {
     const ref = result.docs[0].ref;
@@ -260,7 +261,7 @@ const deleteNestedData = async (parentRef, nestedCollectionString) => {
   const q = query(collectionReference);
   const result = await getDocs(q);
   const ref = result.docs[0].ref;
-  await deleteDoc(ref);
+  console.log(await deleteDoc(ref));
   await deleteDoc(parentRef);
 };
 

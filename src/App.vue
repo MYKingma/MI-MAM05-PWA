@@ -26,7 +26,7 @@
         <el-button @click="$router.push('/physician/case/edit')"
           >Editpage</el-button
         >
-        <el-button @click="$router.push('/physician/case')">CasePage</el-button>
+        <el-button @click="$router.push('/case')">CasePage</el-button>
         <el-button v-if="!user.name" @click="$router.push('/register')"
           >Register</el-button
         >
@@ -50,7 +50,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { logOut } from "./firebase";
-import { setTest } from "./db";
+// import { subscibeToNotifications, sendNotification } from "./firebase";
 
 export default {
   data() {
@@ -68,9 +68,17 @@ export default {
     logOut() {
       logOut();
     },
-    async test() {
-      setTest();
-    },
+    // test() {
+    //   subscibeToNotifications("TEST");
+    // },
+    // send() {
+    //   sendNotification(
+    //     "TEST",
+    //     "Test bericht",
+    //     "Hoi, dit is een test",
+    //     "https://mi-mam05.netlify.app"
+    //   );
+    // },
   },
   watch: {},
 };

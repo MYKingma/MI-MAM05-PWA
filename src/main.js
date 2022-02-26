@@ -3,9 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getMessaging, onMessage, getToken } from "firebase/messaging";
+import { getMessaging, onMessage } from "firebase/messaging";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import "element-plus/es/components/notification/style/index";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faTrashAlt,
@@ -22,6 +21,8 @@ import {
   faAngleDown,
   faAngleLeft,
 } from "@fortawesome/free-solid-svg-icons";
+import { ElNotification } from "element-plus";
+import "element-plus/es/components/notification/style/css";
 
 import App from "./App.vue";
 import router from "./router";
@@ -78,16 +79,18 @@ const storage = getStorage();
 enableIndexedDbPersistence(db);
 
 const message = getMessaging();
-app.config.globalProperties.$messaging = message;
-getToken(message, {
-  vapidKey:
-    "BBP2ovYHYAJxmRGuY10yQy3u6Cztlmm7TfWKYBoEDB61MWfu_QAAeIrLgVMxF3krQZ43h0VKSFuLyI_6OjS89BI",
-});
 
 onMessage(message, function (payload) {
-  console.log("onMessage", payload);
+  ElNotification({
+    title: payload.notification.title,
+    message: payload.notification.body,
+    showClose: false,
+    type: "info",
+    onClick: () => {
+      router.push(`/case?id=${payload.data.id}`);
+    },
+  });
 });
-
 auth.onAuthStateChanged((user) => {
   store.dispatch("fetchUser", user);
 });
@@ -95,7 +98,6 @@ auth.onAuthStateChanged((user) => {
 app.component("IconWrapper", FontAwesomeIcon);
 app.use(router);
 app.use(store);
-
 app.mount("#app");
 
 export { db, auth, storage, message };

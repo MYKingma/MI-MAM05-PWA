@@ -1,5 +1,6 @@
 import { createStore, createLogger } from "vuex";
 import VuexPersistence from "vuex-persist";
+import { sendNotification } from "../firebase";
 
 import {
   getData,
@@ -44,6 +45,7 @@ const store = createStore({
     },
     savedCases: [],
     draftCases: [],
+    loading: false,
   },
   getters: {
     user(state) {
@@ -60,6 +62,9 @@ const store = createStore({
     },
     draftCases(state) {
       return state.draftCases;
+    },
+    loading(state) {
+      return state.loading;
     },
     isCurrentCaseDraft(state) {
       if (state.currentCase.id === "") return true;
@@ -115,6 +120,9 @@ const store = createStore({
     SET_CURRENT_CASE_ID(state, id) {
       state.currentCase.id = id;
     },
+    SET_LOADING(state, bool) {
+      state.loading = bool;
+    },
     SAVE_CURRENT_CASE(state) {
       state.savedCases.push(state.currentCase);
     },
@@ -162,8 +170,10 @@ const store = createStore({
       }
     },
     async loadCaseById({ commit }, caseId) {
+      commit("SET_LOADING", true);
       const caseData = await getCaseOnId(caseId);
       commit("SET_CURRENT_CASE", caseData);
+      commit("SET_LOADING", false);
     },
     async loadSavedCaseById({ commit, state }, caseId) {
       const caseData = state.savedCases.filter((item) => item.id === caseId);
@@ -190,7 +200,14 @@ const store = createStore({
         commit("DELETE_DRAFT_INDEX");
       }
       const caseId = await setCaseData(state.currentCase);
-
+      if (getters.isCurrentCaseDraft) {
+        sendNotification(
+          state.currentCase.specialism,
+          `New case!`,
+          `Physician BERT just uploaded a new case in ${state.currentCase.specialism}, click here and be the first to finish it.`,
+          caseId
+        );
+      }
       commit("SET_CURRENT_CASE_ID", caseId);
     },
     async saveDraftCurrentCase({ state, commit }) {

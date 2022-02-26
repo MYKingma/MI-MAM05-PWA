@@ -16,6 +16,7 @@
     "axios": "^0.26.0",
     "element-plus": "^2.0.1",
     "firebase": "^9.6.6",
+    "firebase-functions": "^3.18.1",
     "unplugin-element-plus": "^0.2.0",
     "vue": "^3.2.30",
     "vue-router": "^4.0.12",

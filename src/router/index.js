@@ -59,7 +59,7 @@ const router = createRouter({
       component: () => import("../views/EditCasePage.vue"),
     },
     {
-      path: "/physician/case",
+      path: "/case",
       name: "caseView",
       // meta: { roles: ["admin", "physician"] },
       component: () => import("../views/CasePage.vue"),

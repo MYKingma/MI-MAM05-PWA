@@ -1,5 +1,5 @@
 <template>
-  <el-main>
+  <el-main v-if="!loading">
     <h1>Case</h1>
     <el-row justify="space-between">
       <el-descriptions
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import ImagePreview from "../components/ImagePreview.vue";
 import ProceedSelector from "../components/case/view/ProceedSelector.vue";
 
@@ -97,15 +97,24 @@ export default {
     ImagePreview,
     ProceedSelector,
   },
+  beforeRouteEnter(to, from, next) {
+    if (to.query.id) {
+      next((vm) => vm.loadCaseById(to.query.id));
+    } else {
+      next();
+    }
+  },
   computed: {
     ...mapGetters({
       caseData: "currentCase",
+      loading: "loading",
     }),
   },
   mounted() {
     console.log(this.caseData);
   },
   methods: {
+    ...mapActions(["loadCaseById"]),
     proceedPhase() {
       console.log("Proceed");
     },

@@ -7,8 +7,10 @@ import {
 } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { ref, uploadBytes, updateMetadata } from "firebase/storage";
+import { getToken } from "firebase/messaging";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { getCollection } from "../db";
-import { storage, auth } from "../main";
+import { storage, auth, message } from "../main";
 import router from "../router";
 
 const register = async (newUser) => {
@@ -74,4 +76,42 @@ const uploadFiles = async (refString, filesArray) => {
   });
 };
 
-export { register, logIn, logOut, resendEmailVerification, uploadFiles };
+const subscibeToNotifications = async (topic) => {
+  const token = await getToken(message, {
+    vapidKey:
+      "BBP2ovYHYAJxmRGuY10yQy3u6Cztlmm7TfWKYBoEDB61MWfu_QAAeIrLgVMxF3krQZ43h0VKSFuLyI_6OjS89BI",
+  });
+  const functions = getFunctions();
+  const formattedTopic = topic.replace(" ", "").toLowerCase();
+  const subscribeToTopic = httpsCallable(functions, "subscribeNotifications");
+  subscribeToTopic({ token, topic: formattedTopic });
+};
+
+const unsubscribeToNotifications = async (topic) => {
+  const token = await getToken();
+  const functions = getFunctions();
+  const formattedTopic = topic.replace(" ", "").toLowerCase();
+  const unsubscribeNotifications = httpsCallable(
+    functions,
+    "unsubscribeNotifications"
+  );
+  unsubscribeNotifications({ token, topic: formattedTopic });
+};
+
+const sendNotification = async (topic, title, text, id) => {
+  const formattedTopic = topic.replace(" ", "").toLowerCase();
+  const functions = getFunctions();
+  const sendNotification = httpsCallable(functions, "sendNotification");
+  sendNotification({ topic: formattedTopic, title, text, id });
+};
+
+export {
+  register,
+  logIn,
+  logOut,
+  resendEmailVerification,
+  uploadFiles,
+  subscibeToNotifications,
+  sendNotification,
+  unsubscribeToNotifications,
+};
