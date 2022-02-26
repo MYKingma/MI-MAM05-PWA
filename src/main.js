@@ -79,6 +79,10 @@ enableIndexedDbPersistence(db);
 
 const message = getMessaging();
 app.config.globalProperties.$messaging = message;
+message.getToken({
+  vapidKey:
+    "BBP2ovYHYAJxmRGuY10yQy3u6Cztlmm7TfWKYBoEDB61MWfu_QAAeIrLgVMxF3krQZ43h0VKSFuLyI_6OjS89BI",
+});
 
 auth.onAuthStateChanged((user) => {
   store.dispatch("fetchUser", user);
