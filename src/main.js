@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getMessaging } from "firebase/messaging";
+import { getMessaging, onMessage, getToken } from "firebase/messaging";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import "element-plus/es/components/notification/style/index";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -79,9 +79,13 @@ enableIndexedDbPersistence(db);
 
 const message = getMessaging();
 app.config.globalProperties.$messaging = message;
-message.getToken({
+getToken(message, {
   vapidKey:
     "BBP2ovYHYAJxmRGuY10yQy3u6Cztlmm7TfWKYBoEDB61MWfu_QAAeIrLgVMxF3krQZ43h0VKSFuLyI_6OjS89BI",
+});
+
+onMessage(message, function (payload) {
+  console.log("onMessage", payload);
 });
 
 auth.onAuthStateChanged((user) => {
