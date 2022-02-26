@@ -64,8 +64,7 @@ self.addEventListener("notificationclick", function (event) {
         var client = windowClients[i];
         // If so, just focus it.
         if (client.url.contains("mi-mam05") && "focus" in client) {
-          client.url = url;
-          return client.focus();
+          return client.focus().navigate(url);
         }
       }
       // If not, then open the target URL in a new window/tab.
