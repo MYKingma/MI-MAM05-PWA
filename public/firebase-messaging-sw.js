@@ -13,25 +13,6 @@ const firebaseConfig = {
 
 const app = firebase.initializeApp(firebaseConfig);
 
-// app
-//   .messaging()
-//   .getToken({
-//     vapidKey:
-//       "BBP2ovYHYAJxmRGuY10yQy3u6Cztlmm7TfWKYBoEDB61MWfu_QAAeIrLgVMxF3krQZ43h0VKSFuLyI_6OjS89BI",
-//   })
-//   .then((currentToken) => {
-//     if (currentToken) {
-//       console.log("client token", currentToken);
-//     } else {
-//       console.log(
-//         "No registration token available. Request permission to generate one."
-//       );
-//     }
-//   })
-//   .catch((err) => {
-//     console.log("An error occurred while retrieving token. ", err);
-//   });
-
 const messaging = firebase.messaging(app);
 
 messaging.setBackgroundMessageHandler(function (payload) {
@@ -64,7 +45,7 @@ self.addEventListener("notificationclick", function (event) {
         var client = windowClients[i];
         // If so, just focus it.
         if (client.url.contains("mi-mam05") && "focus" in client) {
-          return client.focus().navigate(url);
+          return client.navigate(url);
         }
       }
       // If not, then open the target URL in a new window/tab.
