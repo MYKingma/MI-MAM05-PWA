@@ -1,3 +1,32 @@
+//Code for adding event on click of notification
+self.addEventListener("notificationclick", function (event) {
+  let url = event.notification.data;
+  event.notification.close();
+  event.waitUntil(
+    clients
+      .matchAll({ includeUncontrolled: true, type: "all" })
+      .then((windowClients) => {
+        // Check if there is already a window/tab open with the target URL
+        for (var i = 0; i < windowClients.length; i++) {
+          var client = windowClients[i];
+          // If so, just focus it.
+
+          if (
+            (client.url.includes("mi-mam05") ||
+              client.url.includes("localhost")) &&
+            "focus" in client
+          ) {
+            return client.focus();
+          }
+        }
+        // If not, then open the target URL in a new window/tab.
+        if (clients.openWindow) {
+          return clients.openWindow(url);
+        }
+      })
+  );
+});
+
 importScripts("https://www.gstatic.com/firebasejs/8.2.7/firebase-app.js");
 importScripts("https://www.gstatic.com/firebasejs/8.2.7/firebase-messaging.js");
 
@@ -21,37 +50,15 @@ messaging.setBackgroundMessageHandler(function (payload) {
     payload
   );
   // Customize notification here
-  var notification = payload.data;
-  var notificationTitle = notification.title;
+  var notificationTitle = payload.data.title;
   var notificationOptions = {
-    body: notification.body,
+    body: payload.data.body,
     icon: "https://mi-mam05.netlify.app/pwa-512x512.png",
+    data: payload.data.link,
   };
 
   return self.registration.showNotification(
     notificationTitle,
     notificationOptions
-  );
-});
-
-//Code for adding event on click of notification
-self.addEventListener("notificationclick", function (event) {
-  let url = event.notification.data.url;
-  event.notification.close();
-  event.waitUntil(
-    clients.matchAll({ type: "window" }).then((windowClients) => {
-      // Check if there is already a window/tab open with the target URL
-      for (var i = 0; i < windowClients.length; i++) {
-        var client = windowClients[i];
-        // If so, just focus it.
-        if (client.url.contains("mi-mam05") && "focus" in client) {
-          return client.focus();
-        }
-      }
-      // If not, then open the target URL in a new window/tab.
-      if (clients.openWindow) {
-        return clients.openWindow(url);
-      }
-    })
   );
 });

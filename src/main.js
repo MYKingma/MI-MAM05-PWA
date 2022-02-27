@@ -82,12 +82,13 @@ const message = getMessaging();
 
 onMessage(message, function (payload) {
   ElNotification({
-    title: payload.notification.title,
-    message: payload.notification.body,
+    title: payload.data.title,
+    message: payload.data.body,
     showClose: false,
     type: "info",
     onClick: () => {
       router.push(`/case?id=${payload.data.id}`);
+      ElNotification.closeAll();
     },
   });
 });
