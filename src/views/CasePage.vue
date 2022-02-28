@@ -187,7 +187,7 @@ export default {
       el.style.height = height;
     },
     refresh() {
-      this.selectCase({ edit: false, caseId: "efSvC2nU2IAh8jARpz1t" });
+      this.selectCase({ edit: false, caseId: "83wme8E8qSJOnkDw55wc" });
     },
   },
   watch: {},
