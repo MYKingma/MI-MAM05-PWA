@@ -37,7 +37,7 @@ export default {
     return {
       phases: [
         "Additional questions",
-        "Physical Exam",
+        "Physical examination",
         "Additional diagnostic tests",
         "Diagnosis",
         "Treatment",

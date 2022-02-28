@@ -1,9 +1,9 @@
 <template>
   <el-main>
     <h1>Overview</h1>
-    <p>User lands after login</p>
-    <el-button @click="$router.push('/physician/case/edit')">To edit</el-button>
     <el-button @click="newCase">New case</el-button>
+    <br />
+    <br />
     <h4>Online cases</h4>
     <div
       @click="
@@ -17,6 +17,7 @@
       <p>spec: {{ caseData.specialism }}</p>
       <p>uid: {{ caseData.uid }}</p>
     </div>
+    <br />
     <template v-if="['student', 'admin'].includes(currentRole)">
       <h4>Saved cases</h4>
       <div
@@ -32,6 +33,7 @@
         <p>uid: {{ caseData.uid }}</p>
       </div>
     </template>
+    <br />
     <template v-if="['physician', 'admin'].includes(currentRole)">
       <h4>Draft cases</h4>
       <div
@@ -48,14 +50,11 @@
     <br />
     <br />
     <div>
-      <h4>Subscribe</h4>
-      <p
-        v-for="categ in categories"
-        :key="categ"
-        @click="subscribe(categ.name)"
+      <h4>Notification demo</h4>
+      <br />
+      <el-button round type="primary" @click="subscribe('Anesthesiology')"
+        >Subscribe to Anesthesiology</el-button
       >
-        {{ categ.name }}
-      </p>
     </div>
   </el-main>
 </template>

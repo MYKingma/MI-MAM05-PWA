@@ -8,7 +8,7 @@
     <el-menu-item index="/register">Register</el-menu-item>
     <el-menu-item index="/login">Log in</el-menu-item>
   </el-menu> -->
-  <el-affix>
+  <el-affix v-if="user.role === 'admin'">
     <el-row class="home-header" justify="space-between" align="middle">
       <div>
         <!-- <el-button @click="$router.push('/')">Home</el-button> -->
@@ -22,18 +22,28 @@
         {{ user.role || "null" }}
       </p> -->
       <div>
-        <el-button @click="$router.push('/overview')">Overviewpage</el-button>
-        <el-button @click="$router.push('/physician/case/edit')"
-          >Editpage</el-button
+        <el-button
+          v-if="user.role === 'admin'"
+          @click="$router.push('/overview')"
+          >Overview</el-button
         >
-        <el-button @click="$router.push('/case')">CasePage</el-button>
-        <el-button v-if="!user.name" @click="$router.push('/register')"
-          >Register</el-button
+        <el-button
+          v-if="user.role === 'admin'"
+          @click="$router.push('/physician/case/edit')"
+          >Edit</el-button
         >
-        <el-button v-if="!user.name" @click="$router.push('/login')"
+        <el-button @click="$router.push('/case')">Case</el-button>
+        <!-- <el-button
+          v-if="user.role === 'admin'"
+          @click="$router.push('/register')"
+          >R</el-button
+        > -->
+        <!-- <el-button v-if="user.role === 'admin'" @click="$router.push('/login')"
           >Log in</el-button
+        > -->
+        <el-button v-if="user.role === 'admin'" @click="logOut"
+          >Log out</el-button
         >
-        <el-button v-if="user.name" @click="logOut">Log out</el-button>
       </div>
     </el-row>
   </el-affix>

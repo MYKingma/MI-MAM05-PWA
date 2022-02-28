@@ -1,5 +1,18 @@
 <template>
-  <el-main v-if="!loading">
+  <el-main v-if="!loading" class="main">
+    <el-row class="select-phase-wrapper" justify="space-between">
+      <el-col :span="10"
+        ><el-button @click="$router.push('/')" round size="small"
+          >Home</el-button
+        ></el-col
+      >
+      <el-col :span="12" class="max-width"
+        ><el-button @click="refresh" type="primary" round size="small"
+          >Refresh</el-button
+        ></el-col
+      >
+    </el-row>
+    <br />
     <h1>Case</h1>
     <el-row justify="space-between">
       <el-descriptions
@@ -19,13 +32,13 @@
       </el-descriptions>
       <el-descriptions direction="horizontal" :column="1">
         <el-descriptions-item label="Created by"
-          >Floris Wiesman, Dr.</el-descriptions-item
+          >{{ creator.name }}, {{ creator.title }}</el-descriptions-item
         >
-        <el-descriptions-item label="Specialism"
-          >Medical informatics</el-descriptions-item
-        >
+        <el-descriptions-item label="Specialism">{{
+          creator.specialism
+        }}</el-descriptions-item>
         <el-descriptions-item label="Institution"
-          >Amsterdam UMC
+          >{{ creator.institution }}
         </el-descriptions-item>
       </el-descriptions>
     </el-row>
@@ -67,18 +80,44 @@
         caseData.introduction
       }}</el-descriptions-item>
     </el-descriptions>
-    <TransitionGroup
-      tag="ul"
-      name="fade"
-      class="container"
-      @before-leave="beforeLeave"
-    >
-    </TransitionGroup>
+    <template v-for="(phase, index) in caseData.phases" :key="phase">
+      <Transition mode="out-in">
+        <CasePhaseView
+          v-show="currentPhaseIndex === index && !showFinished"
+          :key="phase"
+          :phase-data="phase"
+          :phase-index="index"
+          :creator="creator"
+          @proceed="proceedPhase"
+        />
+      </Transition>
+    </template>
     <ProceedSelector
+      v-if="
+        nextPhaseIndex !== null &&
+        currentPhaseIndex < caseData.phases.length &&
+        !phaseActive &&
+        !showFinished
+      "
       :phaseData="caseData.phases"
-      :phaseIndex="currentPhaseIndex"
+      :phaseIndex="nextPhaseIndex"
+      :creator="creator"
       @proceed="proceedPhase"
     />
+    <div vlass="box" v-if="showFinished">
+      <el-row justify="center">
+        <el-col>
+          <el-result icon="success" title="Finished"> </el-result>
+        </el-col>
+      </el-row>
+    </div>
+    <!-- <p>
+      {{ caseData.phases.length
+      }}{{ nextPhaseIndex === caseData.phases.length }}
+      {{
+        nextPhaseIndex === caseData.phases.length && currentPhaseIndex !== null
+      }}
+    </p> -->
   </el-main>
 </template>
 
@@ -86,16 +125,27 @@
 import { mapGetters, mapActions } from "vuex";
 import ImagePreview from "../components/ImagePreview.vue";
 import ProceedSelector from "../components/case/view/ProceedSelector.vue";
+import CasePhaseView from "../components/case/view/CasePhaseView.vue";
 
 export default {
   data() {
     return {
-      currentPhaseIndex: 0,
+      currentPhaseIndex: null,
+      nextPhaseIndex: 0,
+      phaseActive: false,
+      creator: {
+        name: "C Superman",
+        title: "Dr.",
+        specialism: "Internal medicine",
+        institution: "Amsterdam UMC",
+      },
+      showFinished: false,
     };
   },
   components: {
     ImagePreview,
     ProceedSelector,
+    CasePhaseView,
   },
   beforeRouteEnter(to, from, next) {
     if (to.query.id) {
@@ -114,9 +164,19 @@ export default {
     console.log(this.caseData);
   },
   methods: {
-    ...mapActions(["loadCaseById"]),
+    ...mapActions(["loadCaseById", "selectCase"]),
     proceedPhase() {
-      console.log("Proceed");
+      if (this.nextPhaseIndex === this.caseData.phases.length) {
+        this.currentPhaseIndex = null;
+        this.showFinished = true;
+      } else {
+        this.currentPhaseIndex = this.nextPhaseIndex;
+        this.nextPhaseIndex += 1;
+        this.phaseActive = true;
+      }
+    },
+    finishPhase() {
+      this.phaseActive = false;
     },
     beforeLeave(el) {
       const { marginLeft, marginTop, width, height } =
@@ -126,12 +186,29 @@ export default {
       el.style.width = width;
       el.style.height = height;
     },
+    refresh() {
+      this.selectCase({ edit: false, caseId: "efSvC2nU2IAh8jARpz1t" });
+    },
   },
   watch: {},
 };
 </script>
 
 <style lang="scss" scoped>
+.main {
+  max-width: 778px;
+}
+.max-width {
+  max-width: fit-content;
+}
+.box {
+  border: 1px solid lightgrey;
+  border-radius: 3px;
+  padding: 5px 15px 10px 15px;
+  background-color: rgb(252, 252, 252);
+  max-width: 778px;
+  margin-bottom: 20px;
+}
 .description-box {
   margin-right: 10px;
 }

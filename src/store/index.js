@@ -204,7 +204,7 @@ const store = createStore({
         sendNotification(
           state.currentCase.specialism,
           `New case!`,
-          `Physician BERT just uploaded a new case in ${state.currentCase.specialism}, click here and be the first to finish it.`,
+          `Dr C Superman just published a new case in ${state.currentCase.specialism}, click here and be the first to finish it.`,
           caseId
         );
       }

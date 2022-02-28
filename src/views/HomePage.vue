@@ -1,42 +1,30 @@
 <template>
   <el-main>
-    <h1>Home</h1>
-    <p>
-      Alleen als je bent ingelogd kan je naar de rolspecifieke pagina's (De
-      titel veranderd). <br />
-      Zo niet, dan kom je op de homepagina uit.
-    </p>
+    <el-row justify="center"
+      ><img
+        class="logo"
+        src="https://mi-mam05.netlify.app/pwa-512x512.png"
+        alt=""
+    /></el-row>
+    <el-row justify="center"><h1 class="main-title">MedReas</h1></el-row>
     <br />
-    <el-collapse v-model="activeSection">
-      <el-collapse-item title="Photo upload and preview" name="1">
-        <el-row>
-          <ImageSelector @select-image="imageSelected" />
-        </el-row>
-        <ImagePreview
-          :images="images"
-          :upload="true"
-          @delete-image="deleteImage"
-        />
-      </el-collapse-item>
-      <el-collapse-item title="Upload images to firebase" name="2">
-        <el-row>
-          <el-button @click="uploadImages"
-            >Upload above images to firebase</el-button
-          >
-          <el-button @click="getImages"
-            >Retrieve images from firebase</el-button
-          >
-        </el-row>
-        <ImagePreview :images="imagesFromFirebase" />
-      </el-collapse-item>
-    </el-collapse>
+    <br />
+    <el-row justify="center"><h3>Train your</h3></el-row>
+    <el-row justify="center"><h2>Medical Reasoning</h2></el-row>
+    <el-row justify="center"><h3>skills</h3></el-row>
+    <br />
+    <br />
+    <el-row justify="center">
+      <el-button @click="demo" round>Try our demo</el-button>
+    </el-row>
   </el-main>
 </template>
 
 <script>
-import ImageSelector from "../components/ImageSelector.vue";
-import ImagePreview from "../components/ImagePreview.vue";
-import { uploadImages, getDataOnId } from "../db";
+// import ImageSelector from "../components/ImageSelector.vue";
+// import ImagePreview from "../components/ImagePreview.vue";
+// import { uploadImages, getDataOnId } from "../db";
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -46,29 +34,41 @@ export default {
     };
   },
   components: {
-    ImageSelector,
-    ImagePreview,
+    // ImageSelector,
+    // ImagePreview,
   },
   computed: {},
   async mounted() {},
   methods: {
-    imageSelected(images) {
-      this.images = [].concat(images, this.images);
-    },
-    deleteImage(imageIndex) {
-      this.images.splice(imageIndex, 1);
-    },
-    async uploadImages() {
-      const ids = await uploadImages(this.images);
-      console.log(ids);
-    },
-    async getImages() {
-      const filePaths = await getDataOnId("images", "z4XFjWl4YkpiC2O0vutc");
-      this.imagesFromFirebase = [filePaths];
+    ...mapActions(["newCase", "selectCase"]),
+    // imageSelected(images) {
+    //   this.images = [].concat(images, this.images);
+    // },
+    // deleteImage(imageIndex) {
+    //   this.images.splice(imageIndex, 1);
+    // },
+    // async uploadImages() {
+    //   const ids = await uploadImages(this.images);
+    //   console.log(ids);
+    // },
+    // async getImages() {
+    //   const filePaths = await getDataOnId("images", "z4XFjWl4YkpiC2O0vutc");
+    //   this.imagesFromFirebase = [filePaths];
+    // },
+    demo() {
+      this.selectCase({ edit: false, caseId: "efSvC2nU2IAh8jARpz1t" });
+      this.$router.push("/case");
     },
   },
   watch: {},
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.logo {
+  max-width: 75vw;
+}
+.main-title {
+  font-size: 30px;
+}
+</style>
